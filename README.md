@@ -91,4 +91,4 @@ Directions APIを使用予定
 
 # ER図
 
-![alt text](<ER図   image.PNG>)
+![alt text](image.png)
