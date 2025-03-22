@@ -88,3 +88,6 @@ Directions APIを使用予定
 ●デイリーミッション (sidekiq-cron)
 
 ●デイリースタンプ機能 (activerecord-session_store)
+
+### 画面遷移図
+Figma：https://www.figma.com/design/JiPk10bdxLpIveqGIAS5tk/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C-%3A-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&p=f&t=GfeuYno0mUICyWVy-0
