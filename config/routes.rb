@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'top_pages#top'
+  root "top_pages#top"
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*
