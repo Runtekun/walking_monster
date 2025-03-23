@@ -1,4 +1,4 @@
-# walking-monster
+# walking_monster
 
 # ■ サービス概要                                                               
 
