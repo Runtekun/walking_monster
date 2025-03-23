@@ -1,0 +1,14 @@
+<header class="bg-orange-500 py-3">
+<div class="container mx-auto flex justify-between items-center px-4">
+  <!-- タイトル（中央配置） -->
+  <h1 class="text-white text-lg font-semibold flex-1 text-center">
+    <%= link_to "AppTitle", root_path, class: "hover:opacity-80" %>
+  </h1>
+
+  <!-- ナビゲーション（右端配置） -->
+  <nav class="flex space-x-4">
+    <%= link_to "新規登録", '#', class: "text-black text-base hover:underline" %>
+    <%= link_to "ログイン", '#', class: "text-black text-base hover:underline" %>
+  </nav>
+</div>
+</header>
