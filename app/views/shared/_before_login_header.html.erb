@@ -7,7 +7,8 @@
 
   <!-- ナビゲーション（右端配置） -->
   <nav class="flex space-x-4">
-  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-black text-base hover:underline" %>
+    <%= link_to "新規登録", new_user_registration_path, class: "text-black text-base hover:underline" %>
+    <%= link_to "ログイン", new_user_session_path, class: "text-black text-base hover:underline" %>
   </nav>
 </div>
 </header>
