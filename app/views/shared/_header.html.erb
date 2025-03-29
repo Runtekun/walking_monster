@@ -1,13 +1,30 @@
 <header class="bg-orange-500 py-3">
-<div class="container mx-auto flex justify-between items-center px-4">
-  <!-- タイトル（中央配置） -->
-  <h1 class="text-white text-lg font-semibold flex-1 text-center">
-    <%= link_to "AppTitle", root_path, class: "hover:opacity-80" %>
-  </h1>
+  <div class="container mx-auto flex justify-between items-center px-4">
+    <!-- タイトル（中央配置） -->
+    <h1 class="text-white text-lg font-semibold flex-1 text-center">
+      <%= link_to "AppTitle", root_path, class: "hover:opacity-80" %>
+    </h1>
 
-  <!-- ナビゲーション（右端配置） -->
-  <nav class="flex space-x-4">
-  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-black text-base hover:underline" %>
-  </nav>
-</div>
+    <!-- ナビゲーション（右端配置） -->
+    <nav class="flex space-x-4 items-center">
+      <%= link_to "ウォーキング", "walking_path", class: "text-black text-base hover:underline" %>
+      <div class="relative">
+        <button id="dropdownButton" class="text-black text-base hover:underline focus:outline-none flex items-center">
+          みんなの投稿
+        </button>
+        <div id="dropdownMenu" class="hidden absolute mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+          <%= link_to "投稿一覧", posts_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-200" %>
+          <%= link_to "投稿作成", "new_post_path", class: "block px-4 py-2 text-gray-700 hover:bg-gray-200" %>
+        </div>
+      </div>
+      <%= link_to "モンスター育成", "monster_path", class: "text-black text-base hover:underline" %>
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-black text-base hover:underline" %>
+    </nav>
+  </div>
 </header>
+
+<script>
+  document.getElementById("dropdownButton").addEventListener("click", function () {
+    document.getElementById("dropdownMenu").classList.toggle("hidden");
+  });
+</script>
