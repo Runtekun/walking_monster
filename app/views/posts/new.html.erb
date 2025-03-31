@@ -1,0 +1,19 @@
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-center mb-6">投稿を作成</h1>
+  
+  <%= form_with model: @post, class: "space-y-4" do |f| %>
+    <div>
+      <%= f.label :title, "タイトル", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :title, placeholder: "タイトルを入力", class: "mt-1 block w-full p-2 border-2 border-gray-300 rounded-lg shadow-sm focus:border-indigo-600 focus:ring-indigo-600" %>
+    </div>
+
+    <div>
+      <%= f.label :body, "本文", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :body, placeholder: "本文を入力", class: "mt-1 block w-full p-2 border-2 border-gray-300 rounded-lg shadow-sm focus:border-indigo-600 focus:ring-indigo-600", rows: 6 %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= f.submit "登録", class: "px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition" %>
+    </div>
+  <% end %>
+</div>
