@@ -4,15 +4,15 @@ class PostsController < ApplicationController
     end
 
     def new
-        @post= Board.new
+        @post= Post.new
     end
 
     def create
-        @post = current_user.boards.build(post_params)
+        @post = current_user.posts.build(post_params)
         if @post.save
-          redirect_to posts_path, success: ("%{item}を作成しました", item: post.model_name.human)
+          redirect_to posts_path, success: "投稿を作成しました"
         else
-          flash.now[:danger] = ("%{item}を作成出来ませんでした", item: post.model_name.human)
+          flash.now[:danger] = "投稿を作成出来ませんでした"
           render :new, status: :unprocessable_entity
         end
     end
