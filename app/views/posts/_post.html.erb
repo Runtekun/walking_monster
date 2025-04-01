@@ -3,7 +3,7 @@
 <div class="p-4">
   <div class="flex justify-between items-center">
     <h4 class="text-lg font-semibold">
-      <%= link_to post.title, '#' %>
+       <%= link_to post.title, post_path(post), class: "hover:text-blue-500 transition-colors duration-300" %>
     </h4>
     <div class='flex space-x-2'>
       <%= link_to '#', id: "button-edit-\#{post.id}" do %>
@@ -18,6 +18,6 @@
     <li><i class="bi bi-person"></i> <%= post.user.name %></li>
     <li><i class="bi bi-calendar"></i> <%= l post.created_at, format: :short %></li>
   </ul>
-  <p class="text-gray-700 mt-2">本文</p>
+  <p class="text-gray-700 mt-2"><%= post.body %></p>
 </div>
 </div>

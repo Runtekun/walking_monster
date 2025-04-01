@@ -4,7 +4,10 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
   root "top_pages#top"
-  resources :posts, only: %i[index new create]
+  resources :posts, only: %i[index new create show] do
+    resources :comments, only: %i[create edit destroy], shallow: true
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*

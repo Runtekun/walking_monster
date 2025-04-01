@@ -1,0 +1,23 @@
+<tr id="comment-<%= comment.id %>" class="border-b border-gray-300">
+  <td class="p-2 align-top">
+    <div class="flex items-center gap-3">
+      <%= image_tag "post_placeholder.png", class: "w-10 h-10 rounded-full object-cover" %>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-900"><%= comment.user.name %></h3>
+        <p class="text-gray-700 text-sm"><%= simple_format(comment.body) %></p>
+      </div>
+    </div>
+  </td>
+  <% if current_user.own?(comment) %>
+    <td class="p-2 text-right align-top">
+      <div class="flex gap-2 justify-end">
+        <%= link_to "#", class: "text-blue-500 hover:text-blue-700 edit-comment-link" do %>
+          <i class="bi bi-pencil-fill"></i>
+        <% end %>
+        <%= link_to "#", class: "text-red-500 hover:text-red-700 delete-comment-link" do %>
+          <i class="bi bi-trash-fill"></i>
+        <% end %>
+      </div>
+    </td>
+  <% end %>
+</tr>
