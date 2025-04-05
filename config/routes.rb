@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   }
 
   devise_scope :user do
-    get 'users/profile', to: 'devise/registrations#show', as: :user_profile
+    get "users/profile", to: "devise/registrations#show", as: :user_profile
   end
 
   root "top_pages#top"
