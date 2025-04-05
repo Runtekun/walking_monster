@@ -1,0 +1,24 @@
+<div class="container pt-3">
+  <div class="flex justify-center">
+    <div class="w-full md:w-10/12">
+      <h1 class="text-2xl font-bold mb-5 float-left"><%= "プロフィール" %></h1>
+      <%= link_to "プロフィール編集", edit_user_registration_path, class: 'btn btn-success float-right' %>
+      <table class="table-auto w-full">
+        <tr>
+          <th class="text-left px-4 py-2 font-semibold"><%= "メールアドレス" %></th>
+          <td class="px-4 py-2"><%= current_user.email %></td>
+        </tr>
+        <tr>
+          <th class="text-left px-4 py-2 font-semibold"><%= "ユーザー名" %></th>
+          <td class="px-4 py-2"><%= current_user.name %></td>
+        </tr>
+        <tr>
+          <th class="text-left px-4 py-2 font-semibold"><%= "アバター" %></th>
+          <td class="px-4 py-2">
+            <%= image_tag current_user.avatar.url, class: 'rounded-full w-12 h-12' %>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
