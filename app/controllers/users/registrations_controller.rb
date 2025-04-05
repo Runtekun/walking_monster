@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-   skip_before_action :authenticate_user!
+   skip_before_action :authenticate_user!, only: [ :create ]
    before_action :configure_sign_up_params, only: [ :create ]
-   before_action :configure_account_update_params, only: [ :update ]
+   before_action :configure_account_update_params, only: [ :update, :edit ]
 
   # GET /resource/sign_up
   # def new
@@ -29,7 +29,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def destroy
   #   super
   # end
-
+  
+  def show
+    @user = current_user
+  end
+  
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
   # in to be expired now. This is useful if the user wants to
@@ -48,7 +52,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
    # If you have extra params to permit, append them to the sanitizer.
    def configure_account_update_params
-     devise_parameter_sanitizer.permit(:account_update, keys: [ :name ])
+     devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :avatar ])
    end
 
    # サインイン後のリダイレクト先を指定する
@@ -59,5 +63,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
    # サインアウト後のリダイレクト先を指定する
    def after_inactive_sign_up_path_for(resource)
      root_path
+   end
+
+   def update_resource(resource, params)
+    resource.update_without_password(params)
    end
 end

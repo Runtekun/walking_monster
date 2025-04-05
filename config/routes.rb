@@ -3,6 +3,11 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     sessions: "users/sessions"
   }
+
+  devise_scope :user do
+    get 'users/profile', to: 'devise/registrations#show', as: :user_profile
+  end
+
   root "top_pages#top"
   resources :posts, only: %i[index new create show] do
     resources :comments, only: %i[create edit destroy], shallow: true
