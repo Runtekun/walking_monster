@@ -19,6 +19,7 @@
       </div>
       <%= link_to "モンスター育成", "monster_path", class: "text-black text-base hover:underline" %>
       <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-black text-base hover:underline" %>
+       <%= link_to "プロフィール", user_profile_path, class: "text-black text-base hover:underline" %>
     </nav>
   </div>
 </header>
