@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create edit destroy], shallow: true
   end
 
+  resources :destinations, only: %i[index]
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*
