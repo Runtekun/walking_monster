@@ -1,15 +1,64 @@
+<div class="flex items-center space-x-4">
+  <input id="address" type="textbox" value="東京駅" 
+    class="px-4 py-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="住所を入力">
+
+  <!-- 検索ボタン -->
+  <input type="button" value="検索" onclick="codeAddress()" 
+    class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+</div>
+
 <!-- マップを表示する要素 -->
 <div class="w-full h-[600px]" id="map"></div>
 
 <script>
-  // 地図を初期化する関数
-  function initMap() {
-    const mapOptions = {
-      center: { lat: 35.6803997, lng: 139.7690174 }, // 東京駅周辺
-      zoom: 10
-    };
-    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  }
+let geocoder; 
+let map; 
+let marker;  
+
+// 地図を初期化する関数
+function initMap() {
+  const mapOptions = {
+    center: { lat: 35.6803997, lng: 139.7690174 }, // 東京駅周辺
+    zoom: 10
+  };
+
+  // geocoderを初期化
+  geocoder = new google.maps.Geocoder(); 
+
+  // mapを初期化
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+  // 初期位置にピンを表示
+  marker = new google.maps.Marker({
+    position: { lat: 35.6803997, lng: 139.7690174 },
+    map: map
+  });
+}
+
+// 検索フォームのボタンが押された時に実行される
+function codeAddress() {
+  let inputAddress = document.getElementById('address').value;
+
+  // geocodeを使って住所を緯度経度に変換
+  geocoder.geocode({ 'address': inputAddress }, function(results, status) {
+    if (status == 'OK') {
+      // 初期ピンを削除
+      marker.setMap(null);
+
+      // 検索結果が見つかった場合、地図をその位置に移動
+      map.setCenter(results[0].geometry.location);
+
+      // 新しいピンを表示
+      marker = new google.maps.Marker({
+        map: map,
+        position: results[0].geometry.location
+      });
+    } else {
+      // 検索結果が見つからなかった場合
+      alert('該当する結果がありませんでした：' + status);
+    }
+  });
+}
 </script>
 
 <!-- Google Maps APIを読み込み -->
