@@ -1,14 +1,32 @@
-<div class="flex items-center space-x-4">
+<div class="space-y-4 w-full max-w-md mx-auto my-6">
   <input id="address" type="textbox" value="東京駅" 
-    class="px-4 py-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="住所を入力">
-
+    class="px-4 py-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="住所を入力してください" >
+  
   <!-- 検索ボタン -->
   <input type="button" value="検索" onclick="codeAddress()" 
     class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <h2 class="text-lg font-semibold">経路検索</h2>
+    
+      <!-- 始点 -->
+      <input id="start" type="text" placeholder="始点を入力してください"
+        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+    
+      <!-- 終点 -->
+      <input id="end" type="text" placeholder="終点を入力してください"
+        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+    
+      <!-- ボタン -->
+      <button onclick="getRoute()"
+        class="w-full px-6 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
+        経路を表示
+      </button>
 </div>
 
 <!-- マップを表示する要素 -->
 <div class="w-full h-[600px]" id="map"></div>
+<!-- 経路情報表示 -->
+<div id="route-info" class="text-center mt-4 text-sm text-gray-700 font-medium"></div>
 
 <script>
 let geocoder; 
@@ -33,6 +51,13 @@ function initMap() {
     position: { lat: 35.6803997, lng: 139.7690174 },
     map: map
   });
+
+  // 経路サービスの初期化
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      map: map
+  });
+
 }
 
 // 検索フォームのボタンが押された時に実行される
@@ -59,6 +84,42 @@ function codeAddress() {
     }
   });
 }
+
+  function getRoute() {
+    const start = document.getElementById("start").value;
+    const end = document.getElementById("end").value;
+
+    const request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.WALKING // 徒歩固定
+    };
+
+    directionsService.route(request, function(result, status) {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+
+        // 距離と時間の取得
+        const leg = result.routes[0].legs[0];
+        const distance = leg.distance.text;
+        const duration = leg.duration.text;
+
+        // 距離をメートル単位に変換（"1.5 km" → 1500）
+        let distanceMeters = leg.distance.value;  // ← value はメートル単位
+
+        // 歩数を推定
+        const steps = Math.round(distanceMeters / 0.7); // 歩数 ≒ 距離（m） ÷ 0.7
+
+
+
+        // HTMLに表示
+        document.getElementById("route-info").innerHTML = `距離: ${distance}・所要時間: ${duration}・推定歩数: ${steps.toLocaleString()} 歩`;
+  
+      } else {
+        alert("ルート検索に失敗しました: " + status);
+      }
+    });
+  }
 </script>
 
 <!-- Google Maps APIを読み込み -->
