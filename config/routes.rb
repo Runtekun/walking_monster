@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create edit destroy], shallow: true
   end
 
-  resources :destinations, only: %i[index]
+  resources :destinations, only: %i[index create show edit update destroy]
 
   get "up" => "rails/health#show", as: :rails_health_check
 
