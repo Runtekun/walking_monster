@@ -8,6 +8,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }, if: :password_required?
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :destinations, dependent: :destroy
   mount_uploader :avatar, AvatarUploader
 
   def own?(object)

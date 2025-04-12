@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_09_142001) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_12_103232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_09_142001) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "start"
+    t.string "end"
+    t.string "distance"
+    t.string "duration"
+    t.integer "steps"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_destinations_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -54,4 +61,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_09_142001) do
 
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "destinations", "users"
 end

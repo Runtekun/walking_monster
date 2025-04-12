@@ -1,0 +1,35 @@
+<!-- app/views/destinations/edit.html.erb -->
+<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow">
+  <h2 class="text-xl font-bold mb-4">経路情報を編集</h2>
+
+  <%= form_with model: @destination, local: true do |f| %>
+    <div class="mb-4">
+      <%= f.label :start, "始点" %>
+      <%= f.text_field :start, class: "w-full px-4 py-2 border rounded" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :end, "終点" %>
+      <%= f.text_field :end, class: "w-full px-4 py-2 border rounded" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :distance, "距離" %>
+      <%= f.text_field :distance, class: "w-full px-4 py-2 border rounded" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :duration, "所要時間" %>
+      <%= f.text_field :duration, class: "w-full px-4 py-2 border rounded" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :steps, "推定歩数" %>
+      <%= f.number_field :steps, class: "w-full px-4 py-2 border rounded" %>
+    </div>
+
+    <%= f.submit "更新する", class: "w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+  <% end %>
+
+  <%= link_to '戻る', destination_path(@destination), class: "block mt-4 text-blue-600 hover:underline" %>
+</div>
