@@ -4,12 +4,12 @@
 
   <%= form_with model: @destination, local: true do |f| %>
     <div class="mb-4">
-      <%= f.label :start, "始点" %>
+      <%= f.label :start, "出発地" %>
       <%= f.text_field :start, class: "w-full px-4 py-2 border rounded" %>
     </div>
 
     <div class="mb-4">
-      <%= f.label :end, "終点" %>
+      <%= f.label :end, "目的地" %>
       <%= f.text_field :end, class: "w-full px-4 py-2 border rounded" %>
     </div>
 
