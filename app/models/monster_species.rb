@@ -3,7 +3,7 @@ class MonsterSpecies < ApplicationRecord
     mount_uploader :image_1, MonsterImageUploader
     mount_uploader :image_2, MonsterImageUploader
     mount_uploader :image_3, MonsterImageUploader
-  
+
     def name_for_level(level)
       if level >= evolution_level_2
         name_stage_3
@@ -13,7 +13,7 @@ class MonsterSpecies < ApplicationRecord
         name_stage_1
       end
     end
-  
+
     def image_for_level(level)
       if level >= evolution_level_2
         image_3
@@ -23,4 +23,4 @@ class MonsterSpecies < ApplicationRecord
         image_1
       end
     end
-  end
+end

@@ -42,4 +42,3 @@ MonsterSpecies.create!([
     evolution_level_2: 12
   }
 ])
-

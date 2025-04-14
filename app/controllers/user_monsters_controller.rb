@@ -5,13 +5,13 @@ class UserMonstersController < ApplicationController
       if @user_monster.present?
         @species = @user_monster.monster_species
       else
-        #モンスター未所持時の処理
-        redirect_to new_user_monster_path, alert: 'まずはモンスターを選びましょう！'
+        # モンスター未所持時の処理
+        redirect_to new_user_monster_path, alert: "まずはモンスターを選びましょう！"
       end
     end
 
     def new
-        @monster_species = MonsterSpecies.limit(3) 
+        @monster_species = MonsterSpecies.limit(3)
         @user_monster = UserMonster.new
     end
 
@@ -22,9 +22,9 @@ class UserMonstersController < ApplicationController
           experience: 0
         )
         if @user_monster.save
-          redirect_to user_monsters_path, notice: 'モンスターを選びました！'
+          redirect_to user_monsters_path, notice: "モンスターを選びました！"
         else
-          redirect_to new_user_monster_path, alert: 'モンスターの選択に失敗しました'
+          redirect_to new_user_monster_path, alert: "モンスターの選択に失敗しました"
         end
     end
 end

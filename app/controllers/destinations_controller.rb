@@ -1,5 +1,5 @@
 class DestinationsController < ApplicationController
-  before_action :set_destination, only: [:show, :edit, :update, :destroy, :complete_walk]
+  before_action :set_destination, only: [ :show, :edit, :update, :destroy, :complete_walk ]
 
   def index
     @destinations = current_user.destinations
@@ -39,16 +39,16 @@ class DestinationsController < ApplicationController
     end
   end
 
-  #「歩いた」ボタン押下時の処理（経験値付与）
+  # 「歩いた」ボタン押下時の処理（経験値付与）
   def complete_walk
     if @destination.walked_at.nil?
       @destination.walked_at = Time.current
       exp = (@destination.distance.to_f / 100.0 * 10).floor # 100mあたり10EXP
-      
+
       # 1体のモンスターにEXP加算
       user_monster = current_user.user_monster
       user_monster&.update(experience: user_monster.experience + exp)
-  
+
       @destination.save
       redirect_to destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得したよ！"
     else
