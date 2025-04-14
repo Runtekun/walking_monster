@@ -9,11 +9,18 @@ Rails.application.routes.draw do
   end
 
   root "top_pages#top"
+
   resources :posts, only: %i[index new create show] do
     resources :comments, only: %i[create edit destroy], shallow: true
   end
 
-  resources :destinations, only: %i[index create show edit update destroy]
+  resources :destinations, only: %i[index create show edit update destroy] do
+    member do
+      post :complete_walk
+    end
+  end
+
+  resources :user_monsters, only: %i[index new create]
 
   get "up" => "rails/health#show", as: :rails_health_check
 

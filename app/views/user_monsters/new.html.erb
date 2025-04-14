@@ -1,0 +1,20 @@
+<h2>モンスターを選ぼう！</h2>
+
+<%= form_with model: @user_monster, url: user_monsters_path, local: true do |form| %>
+  <div class="monster-options">
+    <% @monster_species.each do |species| %>
+      <div class="monster-card">
+        <label>
+          <%= radio_button_tag :monster_species_id, species.id %>
+          
+          <%= image_tag species.image_1.url if species.image_1? %>
+
+          <p><%= species.name_for_level(1) %></p> <!-- Assuming you have a method to handle names for stages -->
+          <p><%= species.description %></p>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <%= submit_tag "このモンスターに決める！" %>
+<% end %>
