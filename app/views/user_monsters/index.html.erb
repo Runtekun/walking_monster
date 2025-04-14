@@ -1,0 +1,34 @@
+<div class="relative min-h-screen bg-cover bg-center" style="background-image: url(<%= @background_image.image.url if @background_image.present? %>);">
+  <div class="absolute inset-0 flex flex-col items-center justify-center">
+    
+    <div class="bg-white/20 backdrop-blur-md p-6 rounded-lg shadow-md border border-white">
+      <h2 class="text-2xl font-bold text-black mb-4 text-center">あなたのモンスター</h2>
+
+      <% if @species.image_for_level(@user_monster.level).present? %>
+        <%= image_tag @species.image_for_level(@user_monster.level).url, class: "mx-auto w-48 h-48" %>
+      <% end %>
+
+      <p class="mt-4 text-lg text-white font-semibold text-center"><%= @species.name_for_level(@user_monster.level) %></p>
+    </div>
+
+    <!-- ステータスボックス -->
+    <div class="bg-white text-gray-800 text-sm mt-6 px-6 py-4 rounded-2xl text-center w-full max-w-md shadow">
+    <!-- モンスター名 -->
+      <p class="text-black text-xl font-bold text-center mb-4">
+      <%= @species.name_for_level(@user_monster.level) %>
+      </p>
+      <p>Lv.<%= @user_monster.level %></p>
+      <p>現在: <%= @user_monster.experience %>EXP</p>
+      <p>次のレベルまであと<%= @user_monster.experience_to_next_level - @user_monster.experience %>EXPでLv UP！</p>
+      <p>進化まで: 
+        <% if @user_monster.level < @species.evolution_level_1 %>
+          あと<%= @species.evolution_level_1 - @user_monster.level %>Lv
+        <% elsif @user_monster.level < @species.evolution_level_2 %>
+          あと<%= @species.evolution_level_2 - @user_monster.level %>Lv
+        <% else %>
+          最終進化です。
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>
