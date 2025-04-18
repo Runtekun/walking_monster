@@ -8,7 +8,7 @@
   <p><strong>推定歩数:</strong> <%= number_with_delimiter(@destination.steps) %> 歩</p>
 
   <% if @destination.walked_at.present? %>
-  <p><strong>歩いた日時:</strong> <%= @destination.walked_at.strftime("%Y年%m月%d日 %H:%M") %></p>
+  <p>歩いた日時: <%= @destination.walked_at.in_time_zone('Asia/Tokyo').strftime("%Y年%m月%d日 %H:%M") %></p>
   <% end %>
 
   <div class="mt-4 flex gap-2">
