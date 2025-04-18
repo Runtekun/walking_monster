@@ -54,62 +54,85 @@
 <% end %>
 
 <script>
-let geocoder; 
-let map; 
-let marker;  
+  // --- グローバル変数の重複定義防止（Turbo対策） ---
+  if (typeof geocoder === "undefined") {
+    var geocoder;
+  }
+  if (typeof map === "undefined") {
+    var map;
+  }
+  if (typeof marker === "undefined") {
+    var marker;
+  }
+  if (typeof directionsService === "undefined") {
+    var directionsService;
+  }
+  if (typeof directionsRenderer === "undefined") {
+    var directionsRenderer;
+  }
 
-// 地図を初期化する関数
-function initMap() {
-  const mapOptions = {
-    center: { lat: 35.6803997, lng: 139.7690174 }, // 東京駅周辺
-    zoom: 10
-  };
+  // --- 地図の初期化処理 ---
+  function initMap() {
+    const mapElement = document.getElementById('map');
+    if (!mapElement) return; // 地図エリアがなければ終了
 
-  // geocoderを初期化
-  geocoder = new google.maps.Geocoder(); 
+    const mapOptions = {
+      center: { lat: 35.6803997, lng: 139.7690174 }, // 東京駅
+      zoom: 10
+    };
 
-  // mapを初期化
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    // ジオコーダーと地図の初期化
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(mapElement, mapOptions);
 
-  // 初期位置にピンを表示
-  marker = new google.maps.Marker({
-    position: { lat: 35.6803997, lng: 139.7690174 },
-    map: map
-  });
-
-  // 経路サービスの初期化
-    directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer({
+    // 初期マーカーの設置
+    marker = new google.maps.Marker({
+      position: { lat: 35.6803997, lng: 139.7690174 },
       map: map
+    });
+
+    // 経路検索用サービスと描画の初期化
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+  }
+
+  // --- Turboでキャッシュされる前にマップを破棄 ---
+  document.addEventListener("turbo:before-cache", () => {
+    if (marker) marker.setMap(null);
+    if (directionsRenderer) directionsRenderer.setMap(null);
   });
 
-}
-
-// 検索フォームのボタンが押された時に実行される
-function codeAddress() {
-  let inputAddress = document.getElementById('address').value;
-
-  // geocodeを使って住所を緯度経度に変換
-  geocoder.geocode({ 'address': inputAddress }, function(results, status) {
-    if (status == 'OK') {
-      // 初期ピンを削除
-      marker.setMap(null);
-
-      // 検索結果が見つかった場合、地図をその位置に移動
-      map.setCenter(results[0].geometry.location);
-
-      // 新しいピンを表示
-      marker = new google.maps.Marker({
-        map: map,
-        position: results[0].geometry.location
-      });
-    } else {
-      // 検索結果が見つからなかった場合
-      alert('該当する結果がありませんでした：' + status);
+  // --- Turboページ読み込み時にマップ初期化 ---
+  document.addEventListener("turbo:load", () => {
+    if (typeof google !== 'undefined' && google.maps) {
+      initMap();
     }
   });
-}
 
+  // --- 入力された住所から地図を移動させる ---
+  function codeAddress() {
+    let inputAddress = document.getElementById('address').value;
+
+    geocoder.geocode({ 'address': inputAddress }, function(results, status) {
+      if (status === 'OK') {
+        // 既存マーカー削除
+        if (marker) marker.setMap(null);
+
+        // 地図の中心を住所の位置に変更
+        map.setCenter(results[0].geometry.location);
+
+        // 新しいマーカーを表示
+        marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+        });
+      } else {
+        alert('該当する結果がありませんでした：' + status);
+      }
+    });
+  }
+
+  // --- 経路検索と表示、フォーム値の設定 ---
   function getRoute() {
     const start = document.getElementById("start").value;
     const end = document.getElementById("end").value;
@@ -117,28 +140,24 @@ function codeAddress() {
     const request = {
       origin: start,
       destination: end,
-      travelMode: google.maps.TravelMode.WALKING // 徒歩固定
+      travelMode: google.maps.TravelMode.WALKING
     };
 
     directionsService.route(request, function(result, status) {
       if (status === "OK") {
+        // 経路を地図に描画
         directionsRenderer.setDirections(result);
 
-        // 距離と時間の取得
         const leg = result.routes[0].legs[0];
-        const distance = leg.distance.text;
-        const duration = leg.duration.text;
+        const distance = leg.distance.text; // "3.4 km" など
+        const duration = leg.duration.text; // "45 分" など
+        const distanceMeters = leg.distance.value; // メートル単位
+        const steps = Math.round(distanceMeters / 0.7); // 推定歩数（70cm/歩）
 
-        // 距離をメートル単位に変換（"1.5 km" → 1500）
-        const distanceMeters = leg.distance.value;  // ← value はメートル単位
-
-        // 歩数を推定
-        const steps = Math.round(distanceMeters / 0.7); // 歩数 ≒ 距離（m） ÷ 0.7
-
-        // HTMLに表示
+        // 経路情報を画面に表示
         document.getElementById("route-info").innerHTML = `距離: ${distance}・所要時間: ${duration}・推定歩数: ${steps.toLocaleString()} 歩`;
 
-        // hidden input に値をセット
+        // hiddenフィールドに値を代入（保存用）
         document.getElementById("hidden_start").value = start;
         document.getElementById("hidden_end").value = end;
         document.getElementById("hidden_distance").value = distance;
@@ -152,6 +171,8 @@ function codeAddress() {
 </script>
 
 <!-- Google Maps APIを読み込み -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&callback=initMap">
-</script>
+<% content_for :google_maps do %>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>&callback=initMap">
+  </script>
+<% end %>
