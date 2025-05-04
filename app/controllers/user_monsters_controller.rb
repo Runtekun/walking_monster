@@ -13,6 +13,11 @@ class UserMonstersController < ApplicationController
   end
 
     def new
+      if current_user.user_monster.present?
+        redirect_to user_monsters_path, alert: "すでにモンスターを所持しています"
+        return
+      end
+
         @monster_species = MonsterSpecies.limit(3)
         @user_monster = UserMonster.new
     end
