@@ -42,7 +42,7 @@ class UserMonster < ApplicationRecord
     # 次のレベルに必要な累積経験値
     next_level_total = total_experience_for_level(level + 1)
     # 現在の経験値との差を計算し、0未満にはならないようにする
-    [next_level_total - experience, 0].max
+    [ next_level_total - experience, 0 ].max
   end
 
   # 現在のレベルに到達するために必要な最小経験値を返す

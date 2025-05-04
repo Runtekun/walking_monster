@@ -1,7 +1,7 @@
 class UserMonstersController < ApplicationController
   def index
     @user_monster = current_user.user_monster
-  
+
     if @user_monster.present?
       @species = @user_monster.monster_species
       @user_monster.recalculate_level!  # レベルを再計算
@@ -13,6 +13,11 @@ class UserMonstersController < ApplicationController
   end
 
     def new
+      if current_user.user_monster.present?
+        redirect_to user_monsters_path, alert: "すでにモンスターを所持しています"
+        return
+      end
+
         @monster_species = MonsterSpecies.limit(3)
         @user_monster = UserMonster.new
     end
