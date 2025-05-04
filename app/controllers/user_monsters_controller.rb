@@ -1,7 +1,7 @@
 class UserMonstersController < ApplicationController
   def index
     @user_monster = current_user.user_monster
-  
+
     if @user_monster.present?
       @species = @user_monster.monster_species
       @user_monster.recalculate_level!  # レベルを再計算
