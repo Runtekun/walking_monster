@@ -45,16 +45,16 @@ class DestinationsController < ApplicationController
       @destination.walked_at = Time.current
       distance_km = @destination.distance.to_s.gsub(",", "").gsub(" km", "").to_f
       distance_in_meters = distance_km * 1000.0
-  
+
       exp = (distance_in_meters / 100.0 * 10).floor # 100mあたり10EXP
-  
+
       user_monster = current_user.user_monster
       if user_monster
         user_monster.experience += exp
         user_monster.recalculate_level!  # ←ここでレベル再計算！
         user_monster.save!
       end
-   
+
       @destination.save
       redirect_to destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
     else
