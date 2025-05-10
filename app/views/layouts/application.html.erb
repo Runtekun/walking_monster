@@ -21,15 +21,19 @@
 
   </head>
 
-  <body>
+<body>
   <div class="flex flex-col min-h-screen">
-  <% if user_signed_in? %>
-  <%= render 'shared/header' %>
-  <% else %>
-  <%= render 'shared/before_login_header' %>
-   <% end %>
-  <%= yield %>
-  <%= render 'shared/footer' %>
-  </body>
+    <% if user_signed_in? %>
+      <%= render 'shared/header' %>
+    <% else %>
+      <%= render 'shared/before_login_header' %>
+    <% end %>
+
+    <main class="flex-1">
+      <%= yield %>
+    </main>
+
+    <%= render 'shared/footer' %>
   </div>
+</body>
 </html>
