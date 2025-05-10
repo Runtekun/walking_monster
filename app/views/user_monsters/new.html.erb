@@ -1,20 +1,28 @@
-<h2>モンスターを選ぼう！</h2>
+<div class="flex justify-center items-center min-h-screen bg-cover bg-center" style="background-image: url('<%= asset_path("choose_a_monster-bg-image.png") %>');">
+  <%= form_with model: @user_monster, url: user_monsters_path, local: true do |form| %>
+    <div class="flex justify-center gap-12 mb-12">
+      <% @monster_species.each do |species| %>
+        <div class="w-56 text-center border rounded-xl shadow-md p-6 hover:ring-2 hover:ring-orange-400 bg-white bg-opacity-80">
+          <label>
+            <%= radio_button_tag :monster_species_id, species.id, false, class: "mb-3 scale-125" %>
 
-<%= form_with model: @user_monster, url: user_monsters_path, local: true do |form| %>
-  <div class="monster-options">
-    <% @monster_species.each do |species| %>
-      <div class="monster-card">
-        <label>
-          <%= radio_button_tag :monster_species_id, species.id %>
-          
-          <%= image_tag species.image_1.url if species.image_1? %>
+            <div class="w-full h-36 flex items-center justify-center mb-3">
+              <% if species.image_1? %>
+                <%= image_tag species.image_1.url, class: "object-contain max-h-full max-w-full" %>
+              <% else %>
+                <span class="text-gray-500">No Image</span>
+              <% end %>
+            </div>
 
-          <p><%= species.name_for_level(1) %></p> <!-- Assuming you have a method to handle names for stages -->
-          <p><%= species.description %></p>
-        </label>
-      </div>
-    <% end %>
-  </div>
+            <p class="font-semibold text-lg"><%= species.name_for_level(1) %></p>
+            <p class="text-sm text-gray-600">LV:1</p>
+          </label>
+        </div>
+      <% end %>
+    </div>
 
-  <%= submit_tag "このモンスターに決める！" %>
-<% end %>
+    <div class="flex justify-center">
+      <%= submit_tag "このモンスターに決める！", class: "bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold py-3 px-8 rounded-lg" %>
+    </div>
+  <% end %>
+</div>

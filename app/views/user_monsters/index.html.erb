@@ -1,5 +1,4 @@
-<div class="relative min-h-screen bg-cover bg-center" style="background-image: url(<%= @background_image.image.url if @background_image.present? %>);">
-  <div class="absolute inset-0 flex flex-col items-center justify-center">
+<div class="relative min-h-screen bg-center bg-cover" style="background-image: url('<%= @background_image.present? ? @background_image.image.url : asset_path("monster_ranch-background.gif") %>');">  <div class="absolute inset-0 flex flex-col items-center justify-center">
     
     <!-- モンスター表示エリア -->
     <div class="bg-white/20 backdrop-blur-md p-6 rounded-lg shadow-md border border-white">
@@ -60,5 +59,5 @@
         <% end %>
       </p>
     </div>
-  </div>　　
+  </div>
 </div>
