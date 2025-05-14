@@ -1,23 +1,42 @@
-<div id="post-id-<%= post.id %>" class="bg-white rounded-lg shadow-md overflow-hidden">
-<%= image_tag post.post_image_url, class: "w-72 h-48 object-cover rounded-lg shadow-md" %>
-<div class="p-4">
-  <div class="flex justify-between items-center">
-    <h4 class="text-lg font-semibold">
-       <%= link_to post.title, post_path(post), class: "hover:text-blue-500 transition-colors duration-300" %>
+<div id="post-id-<%= post.id %>" 
+     class="relative w-full max-w-sm h-[500px] rounded-md shadow-md"
+     style="background-image: url('<%= asset_path('poster.png') %>'); background-size: cover; background-position: center center; background-repeat: no-repeat;">
+  <!-- 内容部分 -->
+  <div class="relative z-10 px-4 pt-6 pb-4 flex flex-col justify-between h-full">
+    <!-- 画像部分 -->
+    <div class="w-full aspect-[4/3] overflow-hidden rounded-lg mb-4 mt-6">
+     <%= image_tag post.post_image_url, class: "w-full h-full object-cover", alt: "Post Image" %>
+    </div>
+
+    <!-- タイトル -->
+    <h4 class="text-xl font-bold text-black leading-tight text-center truncate">
+      <%= post.title %>
     </h4>
-    <div class='flex space-x-2'>
-      <%= link_to '#', id: "button-edit-\#{post.id}" do %>
+
+    <!-- 編集/削除ボタン -->
+    <div class='flex space-x-2 mt-1'>
+      <%= link_to '#', id: "button-edit-#{post.id}" do %>
         <i class="bi bi-pencil-fill text-gray-600"></i>
       <% end %>
-      <%= link_to '#', id: "button-delete-\#{post.id}", method: :delete, data: {confirm: ''} do %>
+      <%= link_to '#', id: "button-delete-#{post.id}", method: :delete, data: { confirm: '' } do %>
         <i class="bi bi-trash-fill text-red-600"></i>
       <% end %>
     </div>
+
+    <!-- 投稿者と日付 -->
+    <ul class="text-black text-sm mt-2 space-y-1">
+      <li>ユーザー名：<i class="bi bi-person-fill mr-1"></i><%= post.user.name %></li>
+      <li>投稿日：<i class="bi bi-calendar-event-fill mr-1"></i><%= post.created_at.in_time_zone('Asia/Tokyo').strftime('%Y年%m月%d日 %H:%M') %></li>
+    </ul>
+
+    <!-- 本文 -->
+    <p class="text-black mt-3 text-sm line-clamp-2">
+      <%= post.body %>
+    </p>
+
+    <!-- 詳細ボタン -->
+    <div class="mt-4 flex justify-center">
+      <%= link_to '詳細を見る', post_path(post), class: "bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200" %>
+    </div>
   </div>
-  <ul class="text-gray-600 text-sm mt-2">
-    <li><i class="bi bi-person"></i> <%= post.user.name %></li>
-    <li><i class="bi bi-calendar"></i> <%= l post.created_at, format: :short %></li>
-  </ul>
-  <p class="text-gray-700 mt-2"><%= post.body %></p>
-</div>
 </div>
