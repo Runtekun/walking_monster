@@ -55,9 +55,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_04_063709) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "post_image"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "user_monsters", force: :cascade do |t|
@@ -79,7 +83,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_04_063709) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
+    t.string "name", default: "", null: false
     t.string "avatar"
     t.string "provider"
     t.string "uid"
@@ -91,6 +95,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_04_063709) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "destinations", "users"
+  add_foreign_key "posts", "users"
   add_foreign_key "user_monsters", "monster_species", column: "monster_species_id"
   add_foreign_key "user_monsters", "users"
 end

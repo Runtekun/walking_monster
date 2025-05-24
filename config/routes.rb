@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   root "top_pages#top"
 
-  resources :posts, only: %i[index new create show] do
+  resources :posts, only: %i[index new create show edit destroy update] do
     resources :comments, only: %i[create edit destroy], shallow: true
   end
 

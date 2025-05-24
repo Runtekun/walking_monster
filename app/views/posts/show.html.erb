@@ -13,6 +13,18 @@
       <p class="text-gray-600 text-sm">ユーザー名: <%= @post.user.name %></p>
       <p class="text-gray-500 text-xs"><%= @post.created_at.in_time_zone('Asia/Tokyo').strftime('%Y年%m月%d日 %H:%M') %></p>
     </div>
+        <% if current_user.own?(@post) %>
+     <div class="flex mt-1">
+      <div class="flex space-x-2 ml-auto">
+        <%= link_to edit_post_path(@post), id: "button-edit-#{@post.id}" do %>
+          <i class="ri-edit-2-fill text-gray-600 hover:text-gray-800 text-lg cursor-pointer"></i>
+        <% end %>
+        <%= link_to post_path(@post), id: "button-delete-#{@post.id}", data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } do %>
+          <i class="ri-delete-bin-fill text-red-600 hover:text-red-800 text-xl cursor-pointer"></i>
+        <% end %>
+      </div>
+     </div>
+    <% end %>
   </div>
   <p class="mt-4 text-gray-700 break-words"><%= simple_format(@post.body) %></p>
 </div>
