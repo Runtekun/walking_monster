@@ -1,9 +1,15 @@
-<main class="min-h-screen flex flex-col items-center justify-center text-center">
-  <h1 class="text-3xl font-bold mb-4">Walking Monster</h1>
-  <p class="mb-8">行き先を選んで歩くと、モンスターが成長！楽しみながら健康に。</p>
-  <p class="mb-8">サービスの使い方に関する説明はここに掲載予定</p>
-  <div class="space-y-4">
-    <%= link_to "新規登録", new_user_registration_path, class: "bg-blue-500 text-white px-6 py-3 rounded block text-center" %>
-    <%= link_to "ログイン", new_user_session_path, class: "bg-orange-500 text-white px-6 py-3 rounded block text-center" %>
+<div class="relative w-screen h-screen overflow-hidden bg-gradient-to-r from-blue-300 via-blue-200 to-blue-300">
+  <img src="<%= asset_path 'toppage-bg.png' %>" alt="背景画像"
+       class="absolute w-full h-full object-contain" />
+
+  <!-- オーバーレイ＋テキスト -->
+  <div class="absolute inset-0 bg-blue-200/30 flex flex-col items-center justify-center text-center px-4">
+    <h1 class="text-3xl font-bold mb-4 text-white drop-shadow">Walking Monster</h1>
+    <p class="mb-4 text-white drop-shadow">行き先を選んで歩くと、モンスターが成長！楽しみながら健康に。</p>
+    <p class="mb-8 text-white drop-shadow">サービスの使い方に関する説明はここに掲載予定</p>
+    <div class="space-y-4">
+      <%= link_to "新規登録", new_user_registration_path, class: "bg-blue-500 text-white px-6 py-3 rounded block text-center" %>
+      <%= link_to "ログイン", new_user_session_path, class: "bg-orange-500 text-white px-6 py-3 rounded block text-center" %>
+    </div>
   </div>
-</main>
+</div>

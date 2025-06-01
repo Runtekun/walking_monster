@@ -60,6 +60,10 @@ group :development, :test do
   gem "pry-rails"
 end
 
+group :development do
+  gem "letter_opener_web"
+end
+
 gem "tailwindcss-rails"
 gem "tailwindcss-ruby", "3.4.17"
 gem "devise"
