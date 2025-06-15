@@ -74,3 +74,4 @@ gem "geocoder"                     # 住所から緯度経度を算出する。
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "kaminari"
+gem "rails-i18n"
