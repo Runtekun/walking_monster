@@ -1,35 +1,108 @@
-<!-- app/views/destinations/edit.html.erb -->
-<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow">
-  <h2 class="text-xl font-bold mb-4">行き先情報を編集</h2>
+<div class="space-y-4 w-full max-w-md mx-auto my-6">
+  <input id="address" type="textbox" value="<%= @destination.start %>" 
+    class="px-4 py-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="住所を入力してください" >
+  
+  <!-- 検索ボタン -->
+  <input type="button" value="検索" onclick="codeAddress()" 
+    class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-  <%= form_with model: @destination, local: true do |f| %>
-    <div class="mb-4">
-      <%= f.label :start, "出発地" %>
-      <%= f.text_field :start, class: "w-full px-4 py-2 border rounded" %>
-    </div>
+  <h2 class="text-lg font-semibold">行き先を編集しよう！</h2>
 
-    <div class="mb-4">
-      <%= f.label :end, "目的地" %>
-      <%= f.text_field :end, class: "w-full px-4 py-2 border rounded" %>
-    </div>
+  <!-- 始点 -->
+  <input id="start" type="text" placeholder="出発地を入力してください" value="<%= @destination.start %>"
+    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-    <div class="mb-4">
-      <%= f.label :distance, "距離" %>
-      <%= f.text_field :distance, class: "w-full px-4 py-2 border rounded" %>
-    </div>
+  <!-- 終点 -->
+  <input id="end" type="text" placeholder="目的地を入力してください" value="<%= @destination.end %>"
+    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-    <div class="mb-4">
-      <%= f.label :duration, "所要時間" %>
-      <%= f.text_field :duration, class: "w-full px-4 py-2 border rounded" %>
-    </div>
-
-    <div class="mb-4">
-      <%= f.label :steps, "推定歩数" %>
-      <%= f.number_field :steps, class: "w-full px-4 py-2 border rounded" %>
-    </div>
-
-    <%= f.submit "更新する", class: "w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
-  <% end %>
-
-  <%= link_to '戻る', destination_path(@destination), class: "block mt-4 text-blue-600 hover:underline" %>
+  <!-- 経路表示ボタン -->
+  <button onclick="getRoute()"
+    class="w-full px-6 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
+    経路を表示
+  </button>
 </div>
+
+<!-- マップ -->
+<div class="w-full h-[600px]" id="map"></div>
+
+<!-- 経路情報 -->
+<div id="route-info" class="text-center mt-4 text-sm text-gray-700 font-medium">
+  距離: <%= @destination.distance %>・所要時間: <%= @destination.duration %>・推定歩数: <%= number_with_delimiter(@destination.steps) %> 歩
+</div>
+
+<!-- 保存フォーム -->
+<%= form_with(model: @destination, method: :patch) do |f| %>
+  <%= hidden_field_tag 'destination[start]', @destination.start, id: 'hidden_start' %>
+  <%= hidden_field_tag 'destination[end]', @destination.end, id: 'hidden_end' %>
+  <%= hidden_field_tag 'destination[distance]', @destination.distance, id: 'hidden_distance' %>
+  <%= hidden_field_tag 'destination[duration]', @destination.duration, id: 'hidden_duration' %>
+  <%= hidden_field_tag 'destination[steps]', @destination.steps, id: 'hidden_steps' %>
+
+  <%= f.submit '更新する', class: "w-full px-6 py-2 mt-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" %>
+<% end %>
+
+<script>
+  if (typeof geocoder === "undefined") var geocoder;
+  if (typeof map === "undefined") var map;
+  if (typeof marker === "undefined") var marker;
+  if (typeof directionsService === "undefined") var directionsService;
+  if (typeof directionsRenderer === "undefined") var directionsRenderer;
+
+  function initMap() {
+    const mapElement = document.getElementById('map');
+    if (!mapElement) return;
+
+    const mapOptions = {
+      center: { lat: 35.6803997, lng: 139.7690174 },
+      zoom: 10
+    };
+
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(mapElement, mapOptions);
+
+    marker = new google.maps.Marker({
+      position: { lat: 35.6803997, lng: 139.7690174 },
+      map: map
+    });
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+  }
+
+  document.addEventListener("turbo:before-cache", () => {
+    if (marker) marker.setMap(null);
+    if (directionsRenderer) directionsRenderer.setMap(null);
+  });
+
+  document.addEventListener("turbo:load", () => {
+    if (typeof google !== 'undefined' && google.maps) initMap();
+  });
+
+  function codeAddress() {
+    let inputAddress = document.getElementById('address').value;
+    geocoder.geocode({ 'address': inputAddress }, function(results, status) {
+      if (status === 'OK') {
+        if (marker) marker.setMap(null);
+        map.setCenter(results[0].geometry.location);
+        marker = new google.maps.Marker({ map: map, position: results[0].geometry.location });
+      } else {
+        alert('該当する結果がありませんでした：' + status);
+      }
+    });
+  }
+
+  function getRoute() {
+    const start = document.getElementById("start").value;
+    const end = document.getElementById("end").value;
+
+    const request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.WALKING
+    };
+
+    directionsService.route(request, function(result, status) {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+        c
