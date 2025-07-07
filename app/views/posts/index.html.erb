@@ -2,24 +2,35 @@
      style="background-image: url('<%= asset_path('post-bg.png') %>'); background-size: cover; background-position: center;">
 
   <div class="flex justify-center">
-    <div class="w-full max-w-4xl">
-      <form>
-        <div class="flex mb-3">
-          <input class="w-full p-2 border rounded-l-md" placeholder="検索ワード" type="search"/>
-          <input type="submit" value="検索" class="bg-blue-500 text-white px-4 py-2 rounded-r-md cursor-pointer"/>
-        </div>
+    <div class="w-full max-w-xl text-center">
+      
+      <!-- 検索フォーム -->
+      <form class="flex mb-3">
+        <input class="w-full p-2 border rounded-l-md" placeholder="検索ワード" type="search"/>
+        <input type="submit" value="検索" class="bg-blue-500 text-white px-4 py-2 rounded-r-md cursor-pointer"/>
       </form>
+
+      <!-- 投稿ボタン -->
+      <%= link_to new_post_path, class: "inline-block bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600" do %>
+        <i class="ri-add-line mr-1"></i> 投稿する
+      <% end %>
+
     </div>
   </div>
 
-  <div class="mt-6">
+  <!-- 投稿一覧 -->
+  <div class="mt-8">
     <% if @posts.present? %>
       <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
-       <%= render @posts %>
+        <%= render @posts %>
       </div>
     <% else %>
       <div class="text-center text-gray-600 mt-4">投稿がありません</div>
     <% end %>
   </div>
-  <%= paginate @posts %>
+
+  <!-- ページネーション -->
+  <div class="mt-6">
+    <%= paginate @posts %>
+  </div>
 </div>
