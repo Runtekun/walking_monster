@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "static_pages/contact"
+  get "static_pages/terms"
+  get "static_pages/privacy"
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   devise_for :users, controllers: {
@@ -24,6 +27,10 @@ Rails.application.routes.draw do
   end
 
   resources :user_monsters, only: %i[index new create]
+
+  get "contact", to: "static_pages#contact", as: :contact
+  get "terms", to: "static_pages#terms", as: :terms
+  get "privacy", to: "static_pages#privacy", as: :privacy
 
   get "up" => "rails/health#show", as: :rails_health_check
 

@@ -1,13 +1,10 @@
-<header class="bg-orange-500 py-3">
-  <div class="container mx-auto flex justify-between items-center px-4 relative">
-    <!-- タイトル（中央配置） -->
-    <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
-      <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
-    </h1>
+<header class="bg-orange-500 py-3 shadow-md">
+  <div class="container mx-auto flex items-center px-4 relative">
 
-    <!-- ナビゲーション（右端配置） -->
-    <nav class="flex space-x-4 items-center ml-auto">
+    <!-- 左ナビゲーション -->
+    <nav class="flex items-center space-x-4">
       <%= link_to "行き先を決める", destinations_path, class: "text-black text-base hover:underline" %>
+
       <div class="relative">
         <button id="dropdownButton" class="text-black text-base hover:underline focus:outline-none flex items-center">
           みんなの投稿
@@ -17,15 +14,74 @@
           <%= link_to "投稿作成", new_post_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-200" %>
         </div>
       </div>
-      <%= link_to "モンスター牧場", user_monsters_path , class: "text-black text-base hover:underline" %>
-      <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-black text-base hover:underline" %>
-      <%= link_to "プロフィール", user_profile_path, class: "text-black text-base hover:underline" %>
+
+      <%= link_to "モンスター牧場", user_monsters_path, class: "text-black text-base hover:underline" %>
     </nav>
+
+    <!-- タイトル中央 -->
+    <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
+      <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
+    </h1>
+
+    <!-- ハンバーガーメニュー（右端） -->
+    <div class="ml-auto relative">
+      <button id="hamburgerButton" class="p-2 w-10 h-10 rounded-full bg-white hover:bg-orange-300 transition shadow-md flex items-center justify-center">
+        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <div id="hamburgerMenu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50 transition transform origin-top animate-fade-in-down">
+        <%= link_to "プロフィール", user_profile_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+        <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+        <%= link_to "お問い合わせ", contact_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+        <%= link_to "利用規約", terms_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+        <%= link_to "プライバシーポリシー", privacy_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+      </div>
+    </div>
   </div>
 </header>
 
 <script>
-  document.getElementById("dropdownButton").addEventListener("click", function () {
-    document.getElementById("dropdownMenu").classList.toggle("hidden");
+  document.addEventListener("turbo:load", () => {
+    // ハンバーガーメニューの処理
+    const button = document.getElementById("hamburgerButton");
+    const menu = document.getElementById("hamburgerMenu");
+
+    if (button && menu) {
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
+
+      newButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !newButton.contains(e.target)) {
+          menu.classList.add("hidden");
+        }
+      });
+    }
+
+    // ▼追加：みんなの投稿のドロップダウン処理
+    const dropdownButton = document.getElementById("dropdownButton");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    if (dropdownButton && dropdownMenu) {
+      const newDropdownButton = dropdownButton.cloneNode(true);
+      dropdownButton.parentNode.replaceChild(newDropdownButton, dropdownButton);
+
+      newDropdownButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdownMenu.contains(e.target) && !newDropdownButton.contains(e.target)) {
+          dropdownMenu.classList.add("hidden");
+        }
+      });
+    }
   });
 </script>
