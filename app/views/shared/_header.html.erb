@@ -1,22 +1,5 @@
-<header class="bg-orange-500 py-3 shadow-md">
+<header class="fixed top-0 left-0 w-full bg-orange-500 py-3 shadow-md z-50">
   <div class="container mx-auto flex items-center px-4 relative">
-
-    <!-- 左ナビゲーション -->
-    <nav class="flex items-center space-x-4">
-      <%= link_to "行き先を決める", destinations_path, class: "text-black text-base hover:underline" %>
-
-      <div class="relative">
-        <button id="dropdownButton" class="text-black text-base hover:underline focus:outline-none flex items-center">
-          みんなの投稿
-        </button>
-        <div id="dropdownMenu" class="hidden absolute mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-          <%= link_to "投稿一覧", posts_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-200" %>
-          <%= link_to "投稿作成", new_post_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-200" %>
-        </div>
-      </div>
-
-      <%= link_to "モンスター牧場", user_monsters_path, class: "text-black text-base hover:underline" %>
-    </nav>
 
     <!-- タイトル中央 -->
     <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
