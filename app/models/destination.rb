@@ -7,4 +7,17 @@ class Destination < ApplicationRecord
     validates :end, presence: true
     validates :distance, presence: true
     validates :duration, presence: true
+    validate :walkable_distance
+
+     private
+
+    def walkable_distance
+    #distanceは「5.6 km」などの文字列なので数値部分だけ取り出す
+    dist_value = distance.to_s.match(/[\d\.]+/).to_s.to_f
+    max_distance_km = 15.0
+
+    if dist_value > max_distance_km
+      errors.add(:distance, "は最大#{max_distance_km}kmまでにしてください。")
+    end
+  end
 end
