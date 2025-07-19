@@ -3,6 +3,9 @@ class DestinationsController < ApplicationController
 
   def index
     @destinations = current_user.destinations
+    @user_monster = current_user.user_monster
+    @species = @user_monster&.monster_species
+
   end
 
   def create
@@ -12,6 +15,8 @@ class DestinationsController < ApplicationController
     else
       flash.now[:alert] = "保存に失敗しました: #{@destination.errors.full_messages.to_sentence}"
       @destinations = current_user.destinations
+      @user_monster = current_user.user_monster
+      @species = @user_monster&.monster_species
       render :index
     end
   end

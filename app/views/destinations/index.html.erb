@@ -20,18 +20,39 @@
 
       <!-- ステータスパネル -->
       <div class="flex items-center justify-between bg-[#fff4d1] border-2 border-yellow-300 rounded-lg p-4 shadow-md mb-6">
+        <!-- 左側：画像とレベル -->
         <div class="flex items-center gap-4">
-          <img src="/monster_icon.png" class="w-14 h-14" alt="モンスター" />
+          <!-- モンスター画像（進化段階に応じて） -->
+          <% 
+            if @user_monster.level >= @species.evolution_level_2
+              image_to_display = @species.image_3
+            elsif @user_monster.level >= @species.evolution_level_1
+              image_to_display = @species.image_2
+            else
+              image_to_display = @species.image_1
+            end
+          %>
+          <% if image_to_display.present? %>
+            <%= image_tag image_to_display.url, class: "w-14 h-14 object-contain" %>
+          <% else %>
+            <%= image_tag "/fallback_monster.png", class: "w-14 h-14 object-contain" %>
+          <% end %>
+
           <div>
-            <p class="text-lg font-bold text-[#4b3300]">Lv5</p>
+            <p class="text-lg font-bold text-[#4b3300]">Lv<%= @user_monster.level %></p>
             <div class="w-40 bg-yellow-200 h-3 rounded-full overflow-hidden">
-              <div class="bg-green-500 h-full w-[40%]"></div>
+              <% percent = ((@user_monster.experience.to_f / @user_monster.next_level_experience) * 100).floor rescue 0 %>
+              <div class="bg-green-500 h-full" style="width: <%= percent %>%"></div>
             </div>
-            <p class="text-xs text-gray-700 mt-1">60 / 150 XP</p>
+            <p class="text-xs text-gray-700 mt-1">
+              <%= @user_monster.experience %> / <%= @user_monster.next_level_experience %> XP
+            </p>
           </div>
         </div>
+
+        <!-- 右側：冒険履歴 -->
         <div class="text-right text-sm text-gray-600">
-          <p>今日の冒険回数：<strong>1/3</strong></p>
+          <p>冒険履歴：<strong><%= current_user.total_adventure_count %>回</strong></p>
         </div>
       </div>
 
@@ -40,12 +61,20 @@
         <label for="address" class="text-sm font-bold text-[#3e2c00]">🏰 地図の中心を設定（例：東京駅）</label>
         <div class="flex gap-2">
           <input id="address" type="text" placeholder="例：東京駅"
-            class="flex-1 px-4 py-2 border rounded-lg border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-300 bg-yellow-50" />
+                 class="flex-1 px-4 py-2 border rounded-lg border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-300 bg-yellow-50" />
           <button onclick="codeAddress()"
-            class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-lg shadow">
+                  class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-lg shadow">
             検索
           </button>
         </div>
+      </div>
+
+      <!-- 距離制限バナー -->
+      <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-lg px-4 py-3 mb-6 text-sm flex items-center shadow-sm">
+        <svg class="w-5 h-5 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.257 3.099c.366-.446.994-.553 1.44-.187l.094.083 6 6c.38.38.44.97.143 1.414l-.083.094-6 6c-.446.366-1.074.259-1.44-.187l-.083-.094-6-6a1 1 0 01-.083-1.32l.083-.094 6-6z" clip-rule="evenodd" />
+        </svg>
+        冒険の記録は<strong class="mx-1">最大15km</strong>まで保存できます。それ以上の距離は登録されません。
       </div>
 
       <!-- 出発地・目的地 -->
@@ -53,20 +82,20 @@
         <div>
           <label for="start" class="block text-sm font-bold text-[#3e2c00]">🚶 出発地</label>
           <input id="start" type="text" placeholder="例：自宅・駅"
-            class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
+                 class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
         </div>
         <div>
           <label for="end" class="block text-sm font-bold text-[#3e2c00]">🎯 目的地</label>
           <input id="end" type="text" placeholder="例：〇〇公園・カフェ"
-            class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
+                 class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
         </div>
       </div>
 
       <!-- 経路表示 -->
       <div class="mb-6">
         <button onclick="getRoute()"
-          class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-xl text-lg transition">
-          🌟 経路を表示（冒険スタート）
+                class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-xl text-lg transition">
+          🌟 行き先を決定する
         </button>
       </div>
 
@@ -86,7 +115,7 @@
         <%= hidden_field_tag 'destination[duration]', nil, id: 'hidden_duration' %>
         <%= hidden_field_tag 'destination[steps]', nil, id: 'hidden_steps' %>
 
-        <%= submit_tag '✅ 保存する（冒険記録）', class: "w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow transition mb-10" %>
+        <%= submit_tag '✅ この冒険を記録する ', class: "w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow transition mb-10" %>
       <% end %>
 
       <!-- 行き先リスト -->
@@ -94,8 +123,7 @@
         <h2 class="text-xl font-bold text-[#3e2c00] mb-4">📜 あなたの冒険リスト</h2>
         <% if @destinations.any? %>
           <% @destinations.each do |d| %>
-            <% next if d.id.nil? %> <!-- ← nilレコードを除外 -->
-
+            <% next if d.id.nil? %>
             <div class="flex justify-between items-center bg-yellow-50 p-3 rounded-lg mb-2">
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-[#3e2c00] truncate"><%= d.start %> → <%= d.end %></p>
@@ -110,6 +138,7 @@
           <p class="text-gray-500 text-sm">まだ冒険の記録がありません。</p>
         <% end %>
       </div>
+
     </div>
   </div>
 </div>

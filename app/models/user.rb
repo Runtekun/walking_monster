@@ -30,4 +30,8 @@ class User < ApplicationRecord
       user.remote_avatar_url = auth.info.image
     end
   end
+
+  def total_adventure_count
+    destinations.where.not(walked_at: nil).count
+  end
 end
