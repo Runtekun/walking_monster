@@ -94,21 +94,24 @@
         <h2 class="text-xl font-bold text-[#3e2c00] mb-4">📜 あなたの冒険リスト</h2>
         <% if @destinations.any? %>
           <% @destinations.each do |d| %>
-    <div class="flex justify-between items-center bg-yellow-50 p-3 rounded-lg mb-2">
-      <div class="flex-1 min-w-0">
-        <p class="font-semibold text-[#3e2c00] truncate"><%= d.start %> → <%= d.end %></p>
-        <p class="text-sm text-gray-600"><%= d.distance %></p>
-       </div>
-         <div class="ml-4 shrink-0">
-          <%= link_to "詳細", destination_path(d), class: "text-blue-600 hover:underline text-sm whitespace-nowrap" %>
-         </div>
-       </div>
+            <% next if d.id.nil? %> <!-- ← nilレコードを除外 -->
+
+            <div class="flex justify-between items-center bg-yellow-50 p-3 rounded-lg mb-2">
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-[#3e2c00] truncate"><%= d.start %> → <%= d.end %></p>
+                <p class="text-sm text-gray-600"><%= d.distance %></p>
+              </div>
+              <div class="ml-4 shrink-0">
+                <%= link_to "詳細", destination_path(d), class: "text-blue-600 hover:underline text-sm whitespace-nowrap" %>
+              </div>
+            </div>
           <% end %>
         <% else %>
           <p class="text-gray-500 text-sm">まだ冒険の記録がありません。</p>
         <% end %>
       </div>
     </div>
+  </div>
 </div>
 
 <!-- JavaScript -->

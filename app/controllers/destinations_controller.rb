@@ -8,7 +8,7 @@ class DestinationsController < ApplicationController
   def create
     @destination = current_user.destinations.new(destination_params)
     if @destination.save
-      redirect_to destinations_path, notice: "あなたの行き先予定の経路を保存しました"
+      redirect_to destinations_path, notice: "冒険記録を保存しました"
     else
       flash.now[:alert] = "保存に失敗しました: #{@destination.errors.full_messages.to_sentence}"
       @destinations = current_user.destinations
