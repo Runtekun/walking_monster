@@ -61,7 +61,7 @@ class DestinationsController < ApplicationController
       end
 
       @destination.save
-      redirect_to destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
+      redirect_back fallback_location: destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
     else
       redirect_to destination_path(@destination), alert: "この経路はすでに完了しています。"
     end

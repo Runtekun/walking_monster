@@ -129,8 +129,18 @@
                 <p class="font-semibold text-[#3e2c00] truncate"><%= d.start %> → <%= d.end %></p>
                 <p class="text-sm text-gray-600"><%= d.distance %></p>
               </div>
-              <div class="ml-4 shrink-0">
-                <%= link_to "詳細", destination_path(d), class: "text-blue-600 hover:underline text-sm whitespace-nowrap" %>
+
+                <% if d.walked_at.nil? %>
+                  <%= button_to "冒険完了として記録", complete_walk_destination_path(d),
+                      method: :post,
+                      data: { confirm: "この冒険を完了として記録しますか？" },
+                      class: "px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition" %>
+                <% else %>
+                  <span class="text-gray-500"> 完了済み</span>
+                <% end %>
+
+              <div class="ml-4 shrink-0 flex gap-2">
+                <%= link_to "詳細", destination_path(d), class: "px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition" %>
               </div>
             </div>
           <% end %>
