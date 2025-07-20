@@ -5,7 +5,6 @@ class DestinationsController < ApplicationController
     @destinations = current_user.destinations
     @user_monster = current_user.user_monster
     @species = @user_monster&.monster_species
-
   end
 
   def create

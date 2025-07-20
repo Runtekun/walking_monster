@@ -61,5 +61,4 @@ class UserMonster < ApplicationRecord
   validates :level, numericality: { only_integer: true, greater_than: 0 }
   # バリデーション: 経験値は0以上の整数
   validates :experience, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-
 end
