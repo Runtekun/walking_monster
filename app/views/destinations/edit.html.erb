@@ -1,46 +1,79 @@
-<div class="space-y-4 w-full max-w-md mx-auto my-6">
-  <input id="address" type="textbox" value="<%= @destination.start %>" 
-    class="px-4 py-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="住所を入力してください" >
-  
-  <!-- 検索ボタン -->
-  <input type="button" value="検索" onclick="codeAddress()" 
-    class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+<!-- 背景全体 -->
+<div class="w-full relative"
+     style="background-image: url(<%= asset_path('destinations-bg.jpg') %>);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;">
 
-  <h2 class="text-lg font-semibold">行き先を編集しよう！</h2>
+  <!-- 背景のオーバーレイ -->
+  <div class="absolute inset-0 z-0"></div>
 
-  <!-- 始点 -->
-  <input id="start" type="text" placeholder="出発地を入力してください" value="<%= @destination.start %>"
-    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+  <!-- メインコンテナ -->
+  <div class="relative z-10 flex justify-center items-start pt-10 pb-24"> 
 
-  <!-- 終点 -->
-  <input id="end" type="text" placeholder="目的地を入力してください" value="<%= @destination.end %>"
-    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <div class="w-full max-w-3xl bg-white bg-opacity-90 rounded-xl shadow-xl px-6 py-10 font-[PixelMplus10]">
 
-  <!-- 経路表示ボタン -->
-  <button onclick="getRoute()"
-    class="w-full px-6 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
-    経路を表示
-  </button>
+      <!-- ヘッダー -->
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-bold text-[#3a1e00]">🛠️ 行き先を編集しよう！</h1>
+        <p class="text-sm text-[#5f4b32] mt-1">出発地と目的地を修正し、再度ルートを確認できます。</p>
+      </div>
+
+      <!-- 住所から地図中心を検索 -->
+      <div class="space-y-2 mb-6">
+        <label for="address" class="block text-sm font-bold text-[#3e2c00]">🔍 地図の中心を住所から検索</label>
+        <div class="flex gap-2">
+          <input id="address" type="text" value="<%= @destination.start %>" 
+              placeholder="例：東京駅"
+              class="flex-1 px-4 py-2 border rounded-lg border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-300 bg-yellow-50" />
+          <input type="button" value="検索" onclick="codeAddress()" 
+              class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold rounded-lg shadow" />
+        </div>
+      </div>
+
+      <!-- 出発地・目的地 -->
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label for="start" class="block text-sm font-bold text-[#3e2c00]">🚶 出発地</label>
+          <input id="start" type="text" value="<%= @destination.start %>" placeholder="出発地を入力"
+            class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
+        </div>
+        <div>
+          <label for="end" class="block text-sm font-bold text-[#3e2c00]">🎯 目的地</label>
+          <input id="end" type="text" value="<%= @destination.end %>" placeholder="目的地を入力"
+            class="w-full px-4 py-2 border rounded-lg border-yellow-400 bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-300" />
+        </div>
+      </div>
+
+      <!-- 経路表示 -->
+      <button onclick="getRoute()"
+        class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-xl text-lg transition mb-6">
+        🌟 経路を表示
+      </button>
+
+      <!-- 地図 -->
+      <div class="rounded-lg overflow-hidden border-2 border-yellow-300 shadow-xl mb-4">
+        <div id="map" class="w-full h-[400px] bg-gray-200"></div>
+      </div>
+
+      <!-- 経路情報 -->
+      <div id="route-info" class="text-center font-bold text-[#3e2c00] mb-4 text-base">
+        距離: <%= @destination.distance %>・所要時間: <%= @destination.duration %>・推定歩数: <%= number_with_delimiter(@destination.steps) %> 歩
+      </div>
+
+      <!-- 保存フォーム -->
+      <%= form_with(model: @destination, method: :patch) do |f| %>
+        <%= hidden_field_tag 'destination[start]', @destination.start, id: 'hidden_start' %>
+        <%= hidden_field_tag 'destination[end]', @destination.end, id: 'hidden_end' %>
+        <%= hidden_field_tag 'destination[distance]', @destination.distance, id: 'hidden_distance' %>
+        <%= hidden_field_tag 'destination[duration]', @destination.duration, id: 'hidden_duration' %>
+        <%= hidden_field_tag 'destination[steps]', @destination.steps, id: 'hidden_steps' %>
+
+        <%= f.submit '✅ 更新する（冒険記録）', class: "w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow transition" %>
+      <% end %>
+    </div>
+  </div>
 </div>
-
-<!-- マップ -->
-<div class="w-full h-[600px]" id="map"></div>
-
-<!-- 経路情報 -->
-<div id="route-info" class="text-center mt-4 text-sm text-gray-700 font-medium">
-  距離: <%= @destination.distance %>・所要時間: <%= @destination.duration %>・推定歩数: <%= number_with_delimiter(@destination.steps) %> 歩
-</div>
-
-<!-- 保存フォーム -->
-<%= form_with(model: @destination, method: :patch) do |f| %>
-  <%= hidden_field_tag 'destination[start]', @destination.start, id: 'hidden_start' %>
-  <%= hidden_field_tag 'destination[end]', @destination.end, id: 'hidden_end' %>
-  <%= hidden_field_tag 'destination[distance]', @destination.distance, id: 'hidden_distance' %>
-  <%= hidden_field_tag 'destination[duration]', @destination.duration, id: 'hidden_duration' %>
-  <%= hidden_field_tag 'destination[steps]', @destination.steps, id: 'hidden_steps' %>
-
-  <%= f.submit '更新する', class: "w-full px-6 py-2 mt-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" %>
-<% end %>
 
 <script>
   if (typeof geocoder === "undefined") var geocoder;
@@ -105,4 +138,10 @@
     directionsService.route(request, function(result, status) {
       if (status === "OK") {
         directionsRenderer.setDirections(result);
-        c
+        // ルート情報を画面に表示する処理を追加可能
+      } else {
+        alert("経路検索に失敗しました: " + status);
+      }
+    });
+  }
+</script>

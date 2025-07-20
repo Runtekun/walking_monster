@@ -3,15 +3,19 @@ class DestinationsController < ApplicationController
 
   def index
     @destinations = current_user.destinations
+    @user_monster = current_user.user_monster
+    @species = @user_monster&.monster_species
   end
 
   def create
     @destination = current_user.destinations.new(destination_params)
     if @destination.save
-      redirect_to destinations_path, notice: "あなたの行き先予定の経路を保存しました"
+      redirect_to destinations_path, notice: "冒険記録を保存しました"
     else
       flash.now[:alert] = "保存に失敗しました: #{@destination.errors.full_messages.to_sentence}"
       @destinations = current_user.destinations
+      @user_monster = current_user.user_monster
+      @species = @user_monster&.monster_species
       render :index
     end
   end
@@ -56,7 +60,7 @@ class DestinationsController < ApplicationController
       end
 
       @destination.save
-      redirect_to destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
+      redirect_back fallback_location: destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
     else
       redirect_to destination_path(@destination), alert: "この経路はすでに完了しています。"
     end

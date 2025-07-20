@@ -51,6 +51,12 @@ class UserMonster < ApplicationRecord
     total_experience_for_level(level)
   end
 
+  # 次のレベルに必要な累積経験値（＝バーの最大値）
+  def next_level_experience
+    total_experience_for_level(level + 1)
+  end
+
+
   # バリデーション: レベルは1以上の整数
   validates :level, numericality: { only_integer: true, greater_than: 0 }
   # バリデーション: 経験値は0以上の整数

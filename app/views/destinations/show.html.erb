@@ -1,27 +1,72 @@
-<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow">
-  <h2 class="text-xl font-bold mb-4">行き先の詳細</h2>
+<!-- 背景全体（indexと同じ背景画像） -->
+<div class="w-full min-h-screen relative"
+     style="background-image: url(<%= asset_path('destinations-bg.jpg') %>);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;">
 
-  <p><strong>始点:</strong> <%= @destination.start %></p>
-  <p><strong>終点:</strong> <%= @destination.end %></p>
-  <p><strong>距離:</strong> <%= @destination.distance %></p>
-  <p><strong>所要時間:</strong> <%= @destination.duration %></p>
-  <p><strong>推定歩数:</strong> <%= number_with_delimiter(@destination.steps) %> 歩</p>
+  <!-- 背景のオーバーレイ（薄めの白透明） -->
+  <div class="absolute inset-0 bg-white/30 z-0"></div>
 
-  <% if @destination.walked_at.present? %>
-  <p>歩いた日時: <%= @destination.walked_at.in_time_zone('Asia/Tokyo').strftime("%Y年%m月%d日 %H:%M") %></p>
-  <% end %>
+  <!-- コンテンツの親コンテナ（上寄せ＆中央） -->
+  <div class="relative z-10 min-h-screen flex items-start justify-center px-4 pt-20">
 
-  <div class="mt-4 flex gap-2">
-    <%= link_to "編集", edit_destination_path(@destination), class: "px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600" %>
-    <%= link_to "削除", destination_path(@destination), method: :delete, data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500" %>
-    <%= link_to "戻る", destinations_path, class: "px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" %>
-  </div>
+    <!-- 白い詳細コンテナ -->
+    <div class="max-w-xl w-full p-6 bg-white rounded-xl shadow-xl font-[PixelMplus10]">
 
-  <% if @destination.walked_at.nil? %>
-    <div class="mt-6">
-      <%= button_to "完了", complete_walk_destination_path(@destination), data: { turbo_method: :post, confirm: 'この経路を完了として記録しますか？' }, class: "w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" %>
+      <h2 class="text-2xl font-bold text-center text-[#3a1e00] mb-6">📍 冒険の詳細</h2>
+
+      <div class="space-y-3 text-sm text-gray-700">
+        <div class="flex justify-between">
+          <span class="font-semibold text-[#4b3300]">🛫 出発地:</span>
+          <span><%= @destination.start.presence || "未設定" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold text-[#4b3300]">🏁 目的地:</span>
+          <span><%= @destination.end.presence || "未設定" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold text-[#4b3300]">📏 距離:</span>
+          <span><%= @destination.distance.presence || "不明" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold text-[#4b3300]">⏱️ 所要時間:</span>
+          <span><%= @destination.duration.presence || "不明" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold text-[#4b3300]">👣 推定歩数:</span>
+          <span><%= number_with_delimiter(@destination.steps || 0) %> 歩</span>
+        </div>
+
+        <% if @destination.walked_at.present? %>
+          <div class="flex justify-between">
+            <span class="font-semibold text-[#4b3300]">✅ 完了日時:</span>
+            <span><%= @destination.walked_at.in_time_zone('Asia/Tokyo').strftime("%Y年%m月%d日 %H:%M") %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="mt-6 flex flex-wrap justify-between gap-3">
+        <%= link_to "🔧 編集", edit_destination_path(@destination), class: "flex-1 min-w-[100px] text-center px-4 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition" %>
+
+        <%= link_to "🗑️ 削除", destination_path(@destination),
+            method: :delete,
+            data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+            class: "flex-1 min-w-[100px] text-center px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition" %>
+
+        <%= link_to "🔙 戻る", destinations_path, class: "flex-1 min-w-[100px] text-center px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded-lg hover:bg-gray-400 transition" %>
+      </div>
+
+      <% if @destination.walked_at.nil? %>
+        <div class="mt-6">
+          <%= button_to "🚶 冒険完了として記録", complete_walk_destination_path(@destination),
+              data: { turbo_method: :post, confirm: 'この経路を完了として記録しますか？' },
+              class: "w-full px-4 py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition text-center text-base" %>
+        </div>
+      <% else %>
+        <p class="text-center text-gray-600 mt-6 italic">この冒険はすでに完了しています。</p>
+      <% end %>
+
     </div>
-  <% else %>
-    <p class="text-gray-600 mt-6">この経路はすでに完了しています。</p>
-  <% end %>
+  </div>
 </div>
