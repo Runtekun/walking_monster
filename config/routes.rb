@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard/show"
   get "static_pages/contact"
   get "static_pages/terms"
   get "static_pages/privacy"
@@ -14,7 +15,13 @@ Rails.application.routes.draw do
     get "users/profile", to: "devise/registrations#show", as: :user_profile
   end
 
-  root "top_pages#top"
+  authenticated :user do
+    root to: "dashboard#show", as: :authenticated_root
+  end
+  
+  unauthenticated do
+    root "top_pages#top"
+  end
 
   resources :posts, only: %i[index new create show edit destroy update] do
     resources :comments, only: %i[create edit destroy], shallow: true
@@ -27,6 +34,10 @@ Rails.application.routes.draw do
   end
 
   resources :user_monsters, only: %i[index new create]
+
+  namespace :users do
+    get "ranking", to: "ranking#index"
+  end
 
   get "contact", to: "static_pages#contact", as: :contact
   get "terms", to: "static_pages#terms", as: :terms
