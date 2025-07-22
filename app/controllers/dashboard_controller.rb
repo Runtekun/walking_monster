@@ -1,5 +1,4 @@
 class DashboardController < ApplicationController
-
   def show
     # ユーザーのモンスター情報
     @user_monster = current_user.user_monster
@@ -16,15 +15,15 @@ class DashboardController < ApplicationController
 
     # 進捗率（％）
     @step_progress = if @goal_steps.positive?
-                       ((@today_steps.to_f / @goal_steps) * 100).round
-                     else
-                       0
-                     end
+      ((@today_steps.to_f / @goal_steps) * 100).round
+    else
+      0
+    end
 
     # ==== モンスター育成関連 ====
 
     if @user_monster
-      @monster_name = @user_monster.monster_species.name_for_level(@user_monster.level)
+      @monster_name  = @user_monster.monster_species.name_for_level(@user_monster.level)
       @monster_level = @user_monster.level
 
       current_exp_base = @user_monster.experience_current_level_base

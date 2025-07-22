@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root to: "dashboard#show", as: :authenticated_root
   end
-  
+
   unauthenticated do
     root "top_pages#top"
   end
