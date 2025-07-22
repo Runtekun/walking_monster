@@ -1,6 +1,5 @@
 <div class="min-h-screen bg-gradient-to-b from-yellow-100 via-white to-yellow-50 py-8 px-4 font-[PixelMplus10] flex justify-center">
   <div class="w-full max-w-4xl space-y-8">
-    
     <!-- モンスター情報 -->
     <div class="bg-yellow-50 border-4 border-yellow-300 rounded-2xl shadow-xl p-6">
       <h2 class="text-2xl text-center text-yellow-800 font-bold mb-4 tracking-wide">🐾 あなたのモンスター</h2>
@@ -55,7 +54,7 @@
         <p class="text-sm text-yellow-800 mt-1"><%= [@step_progress, 100].min.round %>% 達成</p>
 
         <% if @step_progress >= 100 %>
-          <p class="mt-1 text-green-700 font-bold">🎉 目標達成！</p>
+          <p id="goal-success" class="mt-1 text-green-700 font-bold text-xl">🎉 目標達成！</p>
         <% end %>
       </div>
     </div>
