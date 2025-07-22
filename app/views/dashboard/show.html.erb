@@ -3,25 +3,48 @@
   <div class="bg-white rounded-xl shadow-md p-6 mb-6">
     <h2 class="text-xl font-bold mb-2">あなたのモンスター</h2>
     <div class="flex items-center space-x-4">
-      <img src="<%= image_path('monster_placeholder.png') %>" alt="モンスター" class="w-24 h-24">
-      <div>
-        <p class="text-lg font-semibold"><%= @user_monster.name %></p>
-        <p>Lv.<%= @user_monster.level %></p>
-        <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
-          <div class="bg-green-500 h-4 rounded-full" style="width: <%= @user_monster.experience_percentage %>%"></div>
+      <% if @user_monster && @user_monster.monster_species %>
+        <%# モンスター種族情報を取得 %>
+        <% @species = @user_monster.monster_species %>
+
+        <%# 進化段階に応じて画像を取得 %>
+        <% image_to_show = @species.image_for_level(@user_monster.level) %>
+
+        <% if image_to_show.present? %>
+          <%= image_tag image_to_show.url, alt: "あなたのモンスター", class: "w-24 h-24 object-contain" %>
+        <% else %>
+          <div class="w-24 h-24 flex items-center justify-center bg-gray-200 text-gray-500 text-sm rounded">
+            モンスター未所持
+          </div>
+        <% end %>
+
+        <div>
+          <p class="text-lg font-semibold"><%= @species.name_for_level(@user_monster.level) %></p>
+          <p>Lv.<%= @user_monster.level %></p>
+          <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
+            <div class="bg-green-500 h-4 rounded-full" style="width: <%= @experience_percentage %>%"></div>
+          </div>
+          <p class="text-sm mt-1">あと<%= @remaining_xp_to_level_up %>XPでレベルアップ</p>
         </div>
-        <p class="text-sm mt-1">あと<%= @user_monster.remaining_xp_to_level_up %>XPでレベルアップ</p>
-      </div>
+      <% else %>
+        <div class="w-24 h-24 flex items-center justify-center bg-gray-200 text-gray-500 text-sm rounded">
+          未選択
+        </div>
+        <div class="ml-4">
+          <p class="text-lg font-semibold">モンスターを選んで育成を始めましょう！</p>
+          <%= link_to "モンスター選択画面へ", new_user_monster_path, class: "text-blue-600 hover:underline" %>
+        </div>
+      <% end %>
     </div>
   </div>
 
   <!-- 今日の目標 -->
   <div class="bg-white rounded-xl shadow-md p-6 mb-6">
     <h2 class="text-xl font-bold mb-2">🎯 今日の目標</h2>
-    <p>目標距離：<%= @goal_distance %>m</p>
-    <p>現在の歩行距離：<%= @today_walked_distance.to_i %>m</p>
+    <p>目標歩数：<%= @goal_steps %>歩</p>
+    <p>現在の歩数：<%= @today_steps %>歩</p>
     <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
-      <div class="bg-blue-500 h-4 rounded-full" style="width: <%= @daily_progress_percentage %>%"></div>
+      <div class="bg-blue-500 h-4 rounded-full" style="width: <%= @step_progress %>%"></div>
     </div>
   </div>
 
@@ -40,9 +63,12 @@
   <div class="bg-white rounded-xl shadow-md p-6 mb-6">
     <h2 class="text-xl font-bold mb-2">⚡ 次にやること</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <%= link_to "記録をつける", new_destination_path, class: "block text-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600" %>
-      <%= link_to "ルートを決める", destinations_path, class: "block text-center bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600" %>
-      <%= link_to "モンスター育成", user_monster_path(@user_monster), class: "block text-center bg-purple-500 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-600" %>
+      <%= link_to "行き先を決める", destinations_path, class: "block text-center bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600" %>
+      <% if @user_monster %>
+        <%= link_to "モンスターを確認", user_monsters_path, class: "block text-center bg-purple-500 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-600" %>
+      <% else %>
+        <%= link_to "モンスターを選んで育成しよう！", new_user_monster_path, class: "block text-center bg-purple-500 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-600" %>
+      <% end %>
     </div>
   </div>
 </div>
