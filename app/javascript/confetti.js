@@ -1,7 +1,7 @@
-import confetti from "canvas-confetti";
+import confetti from 'canvas-confetti';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const success = document.querySelector("#goal-success");
+document.addEventListener('turbo:load', () => {
+  const success = document.querySelector('#goal-success');
   if (success) {
     confetti({
       particleCount: 100,
