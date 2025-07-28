@@ -43,6 +43,9 @@ Rails.application.routes.draw do
   get "terms", to: "static_pages#terms", as: :terms
   get "privacy", to: "static_pages#privacy", as: :privacy
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*
