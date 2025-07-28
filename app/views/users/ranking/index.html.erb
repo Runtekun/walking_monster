@@ -1,0 +1,27 @@
+<h1 class="text-3xl font-bold mb-6">ランキング一覧</h1>
+
+<nav class="mb-6 space-x-4 text-blue-600">
+  <%= link_to "通算歩数", users_ranking_path(category: "steps", period: "all_time"), class: ("font-semibold underline" if @ranking_category == "steps" && @ranking_period == "all_time") %>
+  <%= link_to "週間歩数", users_ranking_path(category: "steps", period: "weekly"), class: ("font-semibold underline" if @ranking_category == "steps" && @ranking_period == "weekly") %>
+  <%= link_to "月間歩数", users_ranking_path(category: "steps", period: "monthly"), class: ("font-semibold underline" if @ranking_category == "steps" && @ranking_period == "monthly") %>
+  <%= link_to "モンスターLv 通算", users_ranking_path(category: "monster_level", period: "all_time"), class: ("font-semibold underline" if @ranking_category == "monster_level" && @ranking_period == "all_time") %>
+</nav>
+
+<table class="min-w-full border border-gray-300">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="border border-gray-300 px-4 py-2 text-left">順位</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">ユーザー名</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">スコア</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rankings.each do |ranking| %>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2"><%= ranking.rank %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= ranking.user.name.presence || "名無し" %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= ranking.score %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
