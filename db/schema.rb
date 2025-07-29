@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_28_041723) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_29_132939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_28_041723) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "rankings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "rank"
+    t.integer "score"
+    t.string "category"
+    t.datetime "recorded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_rankings_on_user_id"
+  end
+
   create_table "user_monsters", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "monster_species_id", null: false
@@ -111,6 +122,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_28_041723) do
   add_foreign_key "comments", "users"
   add_foreign_key "destinations", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "rankings", "users"
   add_foreign_key "user_monsters", "monster_species", column: "monster_species_id"
   add_foreign_key "user_monsters", "users"
   add_foreign_key "user_rankings", "users"

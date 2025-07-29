@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  rank: 1
+  score: 1
+  category: MyString
+  recorded_at: 2025-07-29 22:29:39
+
+two:
+  user: two
+  rank: 1
+  score: 1
+  category: MyString
+  recorded_at: 2025-07-29 22:29:39
