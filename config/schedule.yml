@@ -1,0 +1,4 @@
+user_ranking_batch:
+  cron: "0 2 * * *" # 毎日02:00に実行（任意の時間に変更可）
+  class: "UserRankingBatchJob"
+  queue: default

@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :destinations, dependent: :destroy
   has_one :user_monster, dependent: :destroy
+  has_many :user_rankings, dependent: :destroy
   mount_uploader :avatar, AvatarUploader
 
   def own?(object)

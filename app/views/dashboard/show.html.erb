@@ -1,5 +1,6 @@
 <div class="min-h-screen bg-gradient-to-b from-yellow-100 via-white to-yellow-50 py-8 px-4 font-[PixelMplus10] flex justify-center">
   <div class="w-full max-w-4xl space-y-8">
+
     <!-- モンスター情報 -->
     <div class="bg-yellow-50 border-4 border-yellow-300 rounded-2xl shadow-xl p-6">
       <h2 class="text-2xl text-center text-yellow-800 font-bold mb-4 tracking-wide">🐾 あなたのモンスター</h2>
@@ -59,15 +60,28 @@
       </div>
     </div>
 
-    <!-- ランキングTOP3 -->
+    <!-- 週間歩数ランキングTOP3（モンスター情報なし） -->
     <div class="bg-yellow-50 border-4 border-yellow-300 rounded-2xl shadow-xl p-6">
-      <h2 class="text-2xl text-center text-yellow-800 font-bold mb-4">🏆 週間ランキング</h2>
-      <ol class="list-decimal pl-6 text-yellow-900">
-        <% @walking_ranking.first(3).each_with_index do |user, i| %>
-          <li class="mb-1"><%= user.name %>（<%= user.total_distance.to_i %>m）</li>
+      <h2 class="text-2xl text-center text-yellow-800 font-bold mb-4">🏆 週間歩数ランキング TOP3</h2>
+      <div class="space-y-4 max-w-3xl mx-auto">
+        <% @walking_ranking.each_with_index do |ranking, i| %>
+          <% user = ranking.user %>
+          <div class="bg-white shadow hover:translate-y-1 hover:shadow-lg transition-transform duration-150 rounded-xl p-4 flex items-center border-l-8 border-yellow-400">
+            <div class="text-2xl font-bold text-yellow-700 w-8 text-center"><%= i + 1 %></div>
+            <div class="ml-4 flex-1">
+              <div class="text-lg font-semibold text-gray-800">
+                <%= user.name.presence || "名無し" %>
+              </div>
+            </div>
+            <div class="text-right min-w-[70px]">
+              <div class="text-xl font-bold text-indigo-700">
+                <%= number_with_delimiter(ranking.score) %> 歩
+              </div>
+            </div>
+          </div>
         <% end %>
-      </ol>
-      <div class="text-center mt-2">
+      </div>
+      <div class="text-center mt-4">
         <%= link_to "もっと見る", users_ranking_path, class: "text-blue-600 underline text-sm" %>
       </div>
     </div>
@@ -83,6 +97,7 @@
           <%= link_to "✨ モンスターを選んで育成しよう！", new_user_monster_path, class: "block text-center bg-purple-500 text-white px-4 py-3 rounded-xl shadow hover:bg-purple-600 text-lg" %>
         <% end %>
       </div>
-    </div>    
+    </div>
+
   </div>
 </div>

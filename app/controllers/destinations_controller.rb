@@ -30,7 +30,8 @@ class DestinationsController < ApplicationController
     if @destination.update(destination_params)
       redirect_to @destination, notice: "更新に成功しました"
     else
-      render :edit, alert: "更新に失敗しました: #{@destination.errors.full_messages.to_sentence}"
+      flash.now[:alert] = "更新に失敗しました: #{@destination.errors.full_messages.to_sentence}"
+      render :edit
     end
   end
 
@@ -43,7 +44,7 @@ class DestinationsController < ApplicationController
     end
   end
 
-  # 「歩いた」ボタン押下時の処理（経験値付与）
+  # 「歩いた」ボタン押下時の処理（経験値付与とランキング更新）
   def complete_walk
     if @destination.walked_at.nil?
       @destination.walked_at = Time.current
@@ -55,11 +56,15 @@ class DestinationsController < ApplicationController
       user_monster = current_user.user_monster
       if user_monster
         user_monster.experience += exp
-        user_monster.recalculate_level!  # ←ここでレベル再計算！
+        user_monster.recalculate_level!  # レベル再計算
         user_monster.save!
       end
 
-      @destination.save
+      @destination.save!
+
+      # ランキングの重複発生防止のため全ランキングを再生成
+      UserRankingRealtimeUpdater.refresh_all_periods
+
       redirect_back fallback_location: destination_path(@destination), notice: "お疲れ様！モンスターが#{exp}EXPを獲得して、成長したよ！"
     else
       redirect_to destination_path(@destination), alert: "この経路はすでに完了しています。"
