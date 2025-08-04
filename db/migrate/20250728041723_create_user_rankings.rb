@@ -12,6 +12,6 @@ class CreateUserRankings < ActiveRecord::Migration[7.2]
       t.timestamps
     end
 
-    add_index :user_rankings, [:ranking_category, :ranking_period, :period_start], name: "index_rankings_on_cat_and_period"
+    add_index :user_rankings, [ :ranking_category, :ranking_period, :period_start ], name: "index_rankings_on_cat_and_period"
   end
 end
