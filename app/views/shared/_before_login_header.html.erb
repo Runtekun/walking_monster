@@ -1,14 +1,23 @@
-<header class="bg-orange-500 py-3">
-<div class="container mx-auto flex justify-between items-center px-4">
-  <!-- タイトル（中央配置） -->
-  <h1 class="text-white text-lg font-semibold flex-1 text-center">
-    <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
-  </h1>
+<header class="fixed top-0 left-0 w-full bg-orange-500 py-3 shadow-md z-50">
+  <div class="container mx-auto flex items-center px-4 relative">
 
-  <!-- ナビゲーション（右端配置） -->
-  <nav class="flex space-x-4">
-    <%= link_to "新規登録", new_user_registration_path, class: "text-black text-base hover:underline" %>
-    <%= link_to "ログイン", new_user_session_path, class: "text-black text-base hover:underline" %>
-  </nav>
-</div>
+    <!-- タイトル中央 -->
+    <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
+      <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
+    </h1>
+
+    <!-- ログイン前ハンバーガーメニュー -->
+    <div class="ml-auto relative">
+      <button id="hamburgerButton" class="p-2 w-10 h-10 rounded-full bg-white hover:bg-orange-300 transition shadow-md flex items-center justify-center">
+        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <div id="hamburgerMenu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50 transition transform origin-top animate-fade-in-down">
+        <%= link_to "新規登録", new_user_registration_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+        <%= link_to "ログイン", new_user_session_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
+      </div>
+    </div>
+  </div>
 </header>
