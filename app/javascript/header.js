@@ -1,25 +1,23 @@
-document.addEventListener("turbo:load", () => {
-  const initHamburger = () => {
-    const button = document.getElementById("hamburgerButton");
-    const menu = document.getElementById("hamburgerMenu");
+const initHamburger = () => {
+  const button = document.getElementById("hamburgerButton");
+  const menu = document.getElementById("hamburgerMenu");
 
-    if (!button || !menu) return;
+  if (!button || !menu) return;
 
-    const newButton = button.cloneNode(true);
-    button.parentNode.replaceChild(newButton, button);
+  if (button.dataset.init) return;
+  button.dataset.init = "true";
 
-    newButton.addEventListener("click", (e) => {
-      e.stopPropagation();
-      menu.classList.toggle("hidden");
-    });
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.classList.toggle("hidden");
+  });
 
-    document.addEventListener("click", (e) => {
-      if (!menu.contains(e.target) && !newButton.contains(e.target)) {
-        menu.classList.add("hidden");
-      }
-    });
-  };
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+      menu.classList.add("hidden");
+    }
+  });
+};
 
-  initHamburger();
-  document.addEventListener("turbo:render", initHamburger);
-});
+document.addEventListener("turbo:load", initHamburger);
+document.addEventListener("turbo:render", initHamburger);
