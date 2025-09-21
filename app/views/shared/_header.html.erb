@@ -1,6 +1,5 @@
 <header class="fixed top-0 left-0 w-full bg-orange-500 py-3 shadow-md z-50">
   <div class="container mx-auto flex items-center px-4 relative">
-
     <!-- タイトル中央 -->
     <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
       <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
@@ -24,3 +23,25 @@
     </div>
   </div>
 </header>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    const button = document.getElementById("hamburgerButton");
+    const menu = document.getElementById("hamburgerMenu");
+
+    if (!button || !menu) return;
+
+    // ボタンクリックで開閉
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("hidden");
+    });
+
+    // メニュー外クリックで閉じる
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !button.contains(e.target)) {
+        menu.classList.add("hidden");
+      }
+    });
+  });
+</script>
