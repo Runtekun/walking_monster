@@ -34,7 +34,16 @@
 <body>
   <div class="flex flex-col min-h-screen">
     <% if user_signed_in? %>
+    <!-- PC版ヘッダー -->
+    <div class="hidden lg:block">
       <%= render 'shared/header' %>
+    </div>
+
+    <!-- スマホ版ヘッダー -->
+    <div class="flex lg:hidden">
+      <%= render 'shared/header_sp' %>
+    </div>
+  
     <% else %>
       <%= render 'shared/before_login_header' %>
     <% end %>
@@ -43,7 +52,16 @@
       <%= yield %>
     </main>
 
-    <%= render 'shared/footer' %>
+    <!-- PC版フッター -->
+    <div class="hidden lg:block">
+      <%= render 'shared/footer' %>
+    </div>
+
+    <!-- スマホ版フッター -->
+    <div class="flex lg:hidden">
+      <%= render 'shared/footer_sp' %>
+    </div>
+
   </div>
 </body>
 </html>

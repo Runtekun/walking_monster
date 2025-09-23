@@ -1,0 +1,28 @@
+<footer class="fixed bottom-0 left-0 w-full bg-gray-800 text-white z-50">
+  <nav class="flex justify-around items-center py-3 text-xs">
+
+    <!-- ホーム -->
+    <%= link_to root_path, class: "flex flex-col items-center hover:opacity-80 transition" do %>
+      <i class="ri-home-4-line text-2xl"></i>
+      <span>ホーム</span>
+    <% end %>
+
+    <!-- 行き先を決める -->
+    <%= link_to destinations_path, class: "flex flex-col items-center hover:opacity-80 transition" do %>
+      <i class="ri-map-pin-line text-2xl"></i>
+      <span>行き先</span>
+    <% end %>
+
+    <!-- みんなの投稿 -->
+    <%= link_to posts_path, class: "flex flex-col items-center hover:opacity-80 transition" do %>
+      <i class="ri-group-line text-2xl"></i>
+      <span>投稿一覧</span>
+    <% end %>
+
+    <!-- モンスター牧場 -->
+    <%= link_to user_monsters_path, class: "flex flex-col items-center hover:opacity-80 transition" do %>
+      <i class="ri-bear-smile-line text-2xl"></i>
+      <span>モンスター牧場</span>
+    <% end %>
+  </nav>
+</footer>
