@@ -1,19 +1,33 @@
-<header class="fixed top-0 left-0 w-full bg-orange-500 py-3 shadow-md z-50">
+<header class="fixed top-0 left-0 w-full bg-orange-500 py-3 shadow-md z-50"> 
   <div class="container mx-auto flex items-center px-4 relative">
+    
+    <!-- 左上サイドメニューボタン  -->
+    <div class="flex-shrink-0 hidden lg:block">
+      <button id="toggleSideMenu" 
+        class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-orange-300 transition">
+        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
     <!-- タイトル中央 -->
     <h1 class="text-white text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
       <%= link_to "Walking Monster", root_path, class: "hover:opacity-80" %>
     </h1>
 
-    <!-- ハンバーガーメニュー（右端） -->
+    <!-- 右端 ユーザーメニュー -->
     <div class="ml-auto relative">
-      <button id="hamburgerButton" class="p-2 w-10 h-10 rounded-full bg-white hover:bg-orange-300 transition shadow-md flex items-center justify-center">
-        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      <button id="userMenuButton" 
+        class="p-2 w-10 h-10 rounded-full bg-white hover:bg-orange-300 transition shadow-md flex items-center justify-center">
+        <svg class="w-6 h-6 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2h19.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z"/>
         </svg>
       </button>
 
-      <div id="hamburgerMenu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50 transition transform origin-top animate-fade-in-down">
+      <!-- ドロップダウンメニュー -->
+      <div id="userMenu" 
+        class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50 transition transform origin-top animate-fade-in-down">
         <%= link_to "プロフィール", user_profile_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
         <%= link_to "お問い合わせ", contact_path, class: "block px-5 py-3 text-gray-700 hover:bg-gray-100 font-medium" %>
@@ -24,24 +38,60 @@
   </div>
 </header>
 
+<!-- サイドメニュー -->
+<nav id="sideMenu" 
+  class="fixed top-0 left-0 h-full w-64 
+         bg-gradient-to-b from-orange-600 via-gray-900 to-gray-900 
+         text-white shadow-2xl z-40 
+         transform -translate-x-full transition-transform duration-300 ease-in-out pt-20">
+
+  <%= link_to root_path, class: "flex items-center px-5 py-4 hover:bg-gray-800 hover:border-l-4 hover:border-orange-400 transition" do %>
+    <i class="ri-home-4-line text-2xl text-yellow-400"></i>
+    <span class="ml-3 font-medium">ホーム</span>
+  <% end %>
+
+  <%= link_to destinations_path, class: "flex items-center px-5 py-4 hover:bg-gray-800 hover:border-l-4 hover:border-orange-400 transition" do %>
+    <i class="ri-map-pin-line text-2xl text-yellow-400"></i>
+    <span class="ml-3 font-medium">行き先を決める</span>
+  <% end %>
+
+  <%= link_to posts_path, class: "flex items-center px-5 py-4 hover:bg-gray-800 hover:border-l-4 hover:border-orange-400 transition" do %>
+    <i class="ri-group-line text-2xl text-yellow-400"></i>
+    <span class="ml-3 font-medium">みんなの投稿</span>
+  <% end %>
+
+  <%= link_to user_monsters_path, class: "flex items-center px-5 py-4 hover:bg-gray-800 hover:border-l-4 hover:border-orange-400 transition" do %>
+    <i class="ri-bear-smile-line text-2xl text-yellow-400"></i>
+    <span class="ml-3 font-medium">モンスター牧場</span>
+  <% end %>
+</nav>
+
+<!-- JavaScript -->
 <script>
-  document.addEventListener("turbo:load", () => {
-    const button = document.getElementById("hamburgerButton");
-    const menu = document.getElementById("hamburgerMenu");
-
-    if (!button || !menu) return;
-
-    // ボタンクリックで開閉
-    button.addEventListener("click", (e) => {
+document.addEventListener("turbo:load", () => {
+  // ユーザーメニュー開閉
+  const userButton = document.getElementById("userMenuButton");
+  const userMenu = document.getElementById("userMenu");
+  if (userButton && userMenu) {
+    userButton.onclick = (e) => {
       e.stopPropagation();
-      menu.classList.toggle("hidden");
-    });
-
-    // メニュー外クリックで閉じる
+      userMenu.classList.toggle("hidden");
+    };
     document.addEventListener("click", (e) => {
-      if (!menu.contains(e.target) && !button.contains(e.target)) {
-        menu.classList.add("hidden");
+      if (!userMenu.contains(e.target) && !userButton.contains(e.target)) {
+        userMenu.classList.add("hidden");
       }
     });
-  });
+  }
+
+  // サイドメニュー開閉（トグル）
+  const toggleButton = document.getElementById("toggleSideMenu");
+  const sideMenu = document.getElementById("sideMenu");
+  if (toggleButton && sideMenu) {
+    toggleButton.onclick = () => {
+      sideMenu.classList.toggle("-translate-x-full");
+      sideMenu.classList.toggle("translate-x-0");
+    };
+  }
+});
 </script>
